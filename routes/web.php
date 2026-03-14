@@ -127,12 +127,13 @@ if (in_array(request()->getHost(), ['localhost', '127.0.0.1', '::1'])) {
 
     /*
     |--------------------------------------------------------------------------
-    | PRODUCTION MODE — domain-based subdomain routing
+    | PRODUCTION MODE — matching host manually in middleware
     |--------------------------------------------------------------------------
     */
+    $baseDomain = config('app.base_domain', 'acadsuite.local');
 
-    // TIER 1: Landing page — acadsuite.local
-    Route::domain(config('app.base_domain', 'acadsuite.local'))->group(function () {
+    // TIER 1: Landing page — e.g. acadsuite.com
+    Route::domain($baseDomain)->group(function () {
         Route::get('/', [LandingController::class, 'index'])->name('landing.home');
         Route::get('/register-suite', [SuiteRegistrationController::class, 'create'])->name('landing.register');
         Route::post('/register-suite', [SuiteRegistrationController::class, 'store'])->name('landing.register.store');
@@ -140,17 +141,13 @@ if (in_array(request()->getHost(), ['localhost', '127.0.0.1', '::1'])) {
         Route::get('/success', [LandingController::class, 'success'])->name('landing.success');
     });
 
-    // TIER 2: Pentagonware — admin.acadsuite.local
-    Route::domain('admin.' . config('app.base_domain', 'acadsuite.local'))
+    // TIER 2: Pentagonware Admin — e.g. admin.acadsuite.com
+    Route::domain('admin.' . $baseDomain)
         ->group($superAdminRoutes);
 
-    // TIER 3: Tenant portal — {subdomain}.acadsuite.local
-    Route::domain('{subdomain}.' . config('app.base_domain', 'acadsuite.local'))
-        ->middleware('identify.tenant')
-        ->group($tenantRoutes);
-
-    // TIER 4: Custom Domain Fallback
-    Route::domain('{custom_domain}')
-        ->middleware('identify.tenant')
+    // TIER 3 & 4: Tenant portals (Subdomains or Custom Domains)
+    // We don't use {subdomain} parameter here to avoid "Missing required parameter" errors in route() helper.
+    // The IdentifyTenant middleware will handle the logic by inspecting the request host.
+    Route::middleware('identify.tenant')
         ->group($tenantRoutes);
 }
