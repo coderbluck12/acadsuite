@@ -27,7 +27,17 @@
                         @if($tenant->orcid_url)
                         <li class="nav-item"><a href="{{ $tenant->orcid_url }}" target="_blank" class="nav-link rounded-5" style="color: inherit; text-decoration: none;">ORCID</a></li>
                         @endif
-                        <li class="nav-item"><a href="/login" class="btn btn-primary rounded-pill px-3 py-1 ms-2">Login</a></li>
+                        <li class="nav-item">
+                            @auth
+                                @if(auth()->user()->role === 'admin')
+                                    <a href="/admin/profile" class="btn btn-primary rounded-pill px-3 py-1 ms-2">Dashboard</a>
+                                @else
+                                    <a href="/student/dashboard" class="btn btn-primary rounded-pill px-3 py-1 ms-2">Dashboard</a>
+                                @endif
+                            @else
+                                <a href="/login" class="btn btn-primary rounded-pill px-3 py-1 ms-2">Login</a>
+                            @endauth
+                        </li>
                     </ul>
                 </div>
             </nav>
