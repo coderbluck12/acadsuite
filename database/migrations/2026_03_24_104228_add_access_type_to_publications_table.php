@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('publications', function (Blueprint $table) {
-            $table->enum('access_type', ['view', 'download'])->default('view')->after('content');
-            $table->string('file_path')->nullable()->after('access_type');
+            $table->enum('access_type', ['view', 'download'])->default('view');
+            $table->string('file_path')->nullable();
         });
     }
 
