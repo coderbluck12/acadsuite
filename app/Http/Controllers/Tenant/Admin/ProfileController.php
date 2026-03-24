@@ -29,14 +29,19 @@ class ProfileController extends Controller
             'orcid_url'     => 'nullable|url',
             'address'       => 'nullable|string|max:500',
             'avatar'        => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'logo'          => 'nullable|image|mimes:jpg,jpeg,png,svg|max:2048',
+            'dashboard_bg_image' => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
+            'home_bg_image' => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
             'custom_domain' => 'nullable|string|max:255|unique:tenants,custom_domain,' . $tenant->id,
         ]);
 
-        if ($request->hasFile('avatar')) {
-            if ($tenant->avatar) {
-                Storage::disk('public')->delete($tenant->avatar);
+        foreach (['avatar', 'logo', 'dashboard_bg_image', 'home_bg_image'] as $field) {
+            if ($request->hasFile($field)) {
+                if ($tenant->$field) {
+                    Storage::disk('public')->delete($tenant->$field);
+                }
+                $validated[$field] = $request->file($field)->store('tenant_images', 'public');
             }
-            $validated['avatar'] = $request->file('avatar')->store('avatars', 'public');
         }
 
         $tenant->update($validated);

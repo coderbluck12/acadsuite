@@ -25,10 +25,13 @@ class TenantAuthController extends Controller
         ]);
 
         $tenant = app('currentTenant');
-        $user   = User::where('email', $credentials['email'])->first();
+        
+        $user   = User::where('email', $credentials['email'])
+                      ->where('tenant_id', $tenant->id)
+                      ->first();
 
         if (!$user || !Hash::check($credentials['password'], $user->password)) {
-            return back()->withErrors(['email' => 'Invalid credentials.'])->withInput();
+            return back()->withErrors(['email' => 'Invalid credentials for this portal.'])->withInput();
         }
 
         if ($user->status !== 'approved') {
@@ -38,9 +41,11 @@ class TenantAuthController extends Controller
         Auth::guard('web')->login($user, $request->boolean('remember'));
         $request->session()->regenerate();
 
+        // FIX: Redirect to the URL path instead of the route name!
+        // This keeps the user securely on coderbluck.acadsuite.tertab.com
         return $user->role === 'admin'
-            ? redirect()->route('tenant.admin.profile', ['tenant' => $tenant->subdomain])
-            : redirect()->route('tenant.student.dashboard', ['tenant' => $tenant->subdomain]);
+            ? redirect('/admin/profile')
+            : redirect('/student/dashboard');
     }
 
     public function showRegister(): View
@@ -58,10 +63,12 @@ class TenantAuthController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ]);
 
-        // Check email is unique within this tenant
-        $exists = User::where('email', $validated['email'])->exists();
+        $exists = User::where('email', $validated['email'])
+                      ->where('tenant_id', $tenant->id)
+                      ->exists();
+                      
         if ($exists) {
-            return back()->withErrors(['email' => 'Email already registered.'])->withInput();
+            return back()->withErrors(['email' => 'Email already registered on this portal.'])->withInput();
         }
 
         User::create([
@@ -73,16 +80,17 @@ class TenantAuthController extends Controller
             'status'    => 'pending',
         ]);
 
-        return redirect()->route('tenant.login', ['tenant' => $tenant->subdomain])
-                         ->with('success', 'Registration successful! Please wait for approval.');
+        // FIX: Redirect to the /login path instead of the route name
+        return redirect('/login')->with('success', 'Registration successful! Please wait for approval.');
     }
 
     public function logout(Request $request): RedirectResponse
     {
-        $tenant = app('currentTenant');
         Auth::guard('web')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('tenant.login', ['tenant' => $tenant->subdomain]);
+        
+        // FIX: Redirect to the /login path instead of the route name
+        return redirect('/login');
     }
 }

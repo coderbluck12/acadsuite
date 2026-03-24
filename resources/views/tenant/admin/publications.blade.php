@@ -35,10 +35,11 @@
                         <td>{{ $pub->year ?: '—' }}</td>
                         <td><span class="badge {{ $pub->is_published ? 'bg-success' : 'bg-secondary' }}">{{ $pub->is_published ? 'Published' : 'Draft' }}</span></td>
                         <td>
-                            <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal" data-bs-target="#editPubModal{{ $pub->id }}"><i class="bi bi-pencil"></i></button>
+                            <a href="{{ route('tenant.publications.show', ['tenant' => $tenant->subdomain, 'publication' => $pub->id]) }}" class="btn btn-sm btn-outline-info me-1" target="_blank" title="View Details"><i class="bi bi-eye"></i></a>
+                            <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal" data-bs-target="#editPubModal{{ $pub->id }}" title="Edit"><i class="bi bi-pencil"></i></button>
                             <form method="POST" action="{{ route('tenant.admin.publications.destroy', ['tenant' => $tenant->subdomain, 'publication' => $pub]) }}" class="d-inline" onsubmit="return confirm('Delete this publication?')">
                                 @csrf @method('DELETE')
-                                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                <button class="btn btn-sm btn-outline-danger" title="Delete"><i class="bi bi-trash"></i></button>
                             </form>
                         </td>
                     </tr>
@@ -83,9 +84,19 @@
                             <label class="form-label fw-semibold">Link (URL)</label>
                             <input type="url" name="link" class="form-control" value="{{ $pub->url }}">
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">Upload File</label>
-                            <input type="file" name="file" class="form-control">
+                        <div class="row g-3 mb-3">
+                            <div class="col-6">
+                                <label class="form-label fw-semibold">Access Type *</label>
+                                <select name="access_type" class="form-select" required onchange="toggleFileReq(this, 'editInput{{ $pub->id }}')">
+                                    <option value="view" {{ ($pub->access_type ?? 'view') == 'view' ? 'selected' : '' }}>View Only</option>
+                                    <option value="download" {{ ($pub->access_type ?? 'view') == 'download' ? 'selected' : '' }}>Downloadable</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label fw-semibold">Upload File</label>
+                                <input type="file" name="file_path" id="editInput{{ $pub->id }}" class="form-control" accept=".pdf,.doc,.docx">
+                                @if($pub->file_path) <small class="text-success"><i class="bi bi-check-circle"></i> File uploaded</small> @endif
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Visibility</label>
@@ -136,9 +147,18 @@
                         <label class="form-label fw-semibold">Link (URL)</label>
                         <input type="url" name="link" class="form-control" placeholder="https://...">
                     </div>
-                    <div class="mb-3">
-                        <label for="pubFile" class="form-label fw-semibold">Upload File</label>
-                        <input type="file" name="file" class="form-control" id="pubFile">
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="form-label fw-semibold">Access Type *</label>
+                            <select name="access_type" class="form-select" required onchange="toggleFileReq(this, 'createFileInput')">
+                                <option value="view" selected>View Only</option>
+                                <option value="download">Downloadable</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label for="createFileInput" class="form-label fw-semibold">Upload File</label>
+                            <input type="file" name="file_path" id="createFileInput" class="form-control" accept=".pdf,.doc,.docx">
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="visibility" class="form-label fw-semibold">Visibility</label>
@@ -160,5 +180,10 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-<script>$(document).ready(function(){ $('#pubTable').DataTable({ destroy: true, ordering: true }); });</script>
+<script>
+    $(document).ready(function(){ $('#pubTable').DataTable({ destroy: true, ordering: true }); });
+    function toggleFileReq(select, inputId) {
+        document.getElementById(inputId).required = (select.value === 'download');
+    }
+</script>
 @endpush

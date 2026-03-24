@@ -49,13 +49,45 @@
                 <label class="form-label fw-semibold">DOI / URL</label>
                 <input type="url" name="url" class="form-control" value="{{ old('url', $publication->url ?? '') }}" placeholder="https://doi.org/...">
             </div>
-            <div class="mb-4">
-                <label class="form-label fw-semibold">Cover Image</label>
-                <input type="file" name="cover_image" class="form-control" accept="image/*">
-                @if(!empty($publication->cover_image))
-                    <div class="mt-2"><img src="{{ asset('storage/' . $publication->cover_image) }}" height="80" class="rounded border"></div>
-                @endif
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Cover Image</label>
+                    <input type="file" name="cover_image" class="form-control" accept="image/*">
+                    @if(!empty($publication->cover_image))
+                        <div class="mt-2"><img src="{{ asset('storage/' . $publication->cover_image) }}" height="80" class="rounded border"></div>
+                    @endif
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Access Type *</label>
+                    <select name="access_type" class="form-select" required onchange="toggleFileRequirement(this)">
+                        <option value="view" {{ old('access_type', $publication->access_type ?? 'view') == 'view' ? 'selected' : '' }}>View Only</option>
+                        <option value="download" {{ old('access_type', $publication->access_type ?? 'view') == 'download' ? 'selected' : '' }}>Downloadable</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">File Document</label>
+                    <input type="file" name="file_path" id="file_path_input" class="form-control" accept=".pdf,.doc,.docx">
+                    @if(!empty($publication->file_path))
+                        <div class="mt-2 text-success small"><i class="bi bi-file-earmark-check"></i> File currently uploaded</div>
+                    @endif
+                </div>
             </div>
+            
+            <script>
+                function toggleFileRequirement(select) {
+                    const fileInput = document.getElementById('file_path_input');
+                    if(select.value === 'download') {
+                        @if(empty($publication->file_path))
+                            fileInput.required = true;
+                        @endif
+                    } else {
+                        fileInput.required = false;
+                    }
+                }
+                // Run on load
+                document.addEventListener('DOMContentLoaded', () => toggleFileRequirement(document.querySelector('select[name="access_type"]')));
+            </script>
+
             <div class="d-flex gap-2">
                 <button type="submit" class="btn btn-primary px-4">{{ isset($publication) ? 'Update' : 'Add Publication' }}</button>
                 <a href="{{ route('tenant.admin.publications.index', ['tenant' => $tenant->subdomain]) }}" class="btn btn-outline-secondary px-4">Cancel</a>

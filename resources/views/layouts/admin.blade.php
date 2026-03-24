@@ -43,29 +43,41 @@
 
 @section('body')
     {{-- Navbar --}}
-    <nav class="navbar navbar-expand-lg fixed-top">
+    <nav class="navbar navbar-expand-lg fixed-top" @if(isset($tenant) && $tenant->dashboard_bg_image) style="background: rgba(63, 81, 181, 0.9);" @endif>
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
-                <img src="{{ asset('assets/logo.png') }}" alt="logo" style="width:70px;">
+                @if(isset($tenant) && $tenant->logo)
+                    <img src="{{ asset('storage/' . $tenant->logo) }}" alt="logo" style="height:40px; width:auto; max-width:120px; object-fit:contain;">
+                @else
+                    <img src="{{ asset('assets/logo.png') }}" alt="logo" style="width:70px;">
+                @endif
             </a>
             <div class="ms-auto d-flex align-items-center gap-3">
                 <small class="text-white d-none d-md-inline">{{ isset($tenant) ? $tenant->owner_name : 'Super Admin' }}</small>
-                <img src="{{ asset('assets/logo.png') }}" alt="Profile" class="profile-img">
+                @if(isset($tenant) && $tenant->avatar)
+                    <img src="{{ asset('storage/' . $tenant->avatar) }}" alt="Profile" class="profile-img">
+                @else
+                    <img src="{{ asset('assets/logo.png') }}" alt="Profile" class="profile-img">
+                @endif
                 <button class="toggle-btn" id="menuToggle"><i class="bi bi-list"></i></button>
             </div>
         </div>
     </nav>
 
     {{-- Sidebar --}}
-    <aside class="sidebar" id="sidebar">
+    <aside class="sidebar" id="sidebar" @if(isset($tenant) && $tenant->dashboard_bg_image) style="background: rgba(63, 81, 181, 0.9);" @endif>
         <div class="mb-4 text-center pt-2">
-            <img src="{{ asset('assets/logo.png') }}" alt="logo" style="width:70px;">
+            @if(isset($tenant) && $tenant->logo)
+                <img src="{{ asset('storage/' . $tenant->logo) }}" alt="logo" style="height:50px; width:auto; max-width:120px; object-fit:contain;">
+            @else
+                <img src="{{ asset('assets/logo.png') }}" alt="logo" style="width:70px;">
+            @endif
         </div>
         @yield('sidebar-nav')
     </aside>
 
     {{-- Content --}}
-    <main class="content mt-5 pt-3">
+    <main class="content mt-5 pt-3" @if(isset($tenant) && $tenant->dashboard_bg_image) style="background-image: url('{{ asset('storage/' . $tenant->dashboard_bg_image) }}'); background-size: cover; background-attachment: fixed; background-position: center;" @endif>
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}

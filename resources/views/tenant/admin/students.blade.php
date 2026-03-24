@@ -21,7 +21,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($students as $i => $student)
+                    @foreach($students as $i => $student)
                     <tr>
                         <td>{{ $students->firstItem() + $i }}</td>
                         <td>{{ $student->name }}</td>
@@ -51,9 +51,7 @@
                             @endif
                         </td>
                     </tr>
-                    @empty
-                    <tr><td colspan="6" class="text-center text-muted py-4">No students registered yet.</td></tr>
-                    @endforelse
+                    @endforeach
                 </tbody>
             </table>
             {{ $students->links() }}

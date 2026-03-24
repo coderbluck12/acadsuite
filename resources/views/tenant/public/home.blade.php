@@ -1,49 +1,44 @@
 @extends('layouts.public')
 
 @section('content')
-    <!-- Carousel and Navbar -->
     <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
 
-        <!-- Navbar Inside Carousel -->
         <div class="position-absolute container top-0 start-50 translate-middle-x px-3 pt-4 w-100 "
             style="z-index: 10;">
             <nav class="navbar navbar-expand-md border border-white rounded-5 glass-navbar px-4 py-2 w-100">
-                <!-- Logo -->
-                <a class="navbar-brand" href="{{ route('tenant.home', ['tenant' => $tenant->subdomain]) }}">
-                    @if($tenant->avatar)
-                        <img src="{{ asset('storage/' . $tenant->avatar) }}" alt="Logo" style="width: 100px;">
+                <a class="navbar-brand" href="/">
+                    @if($tenant->logo)
+                        <img src="{{ asset('storage/' . $tenant->logo) }}" alt="Logo" style="height: 40px; width: auto; max-width: 120px; object-fit: contain;">
                     @else
                         <img src="{{ asset('assets/logo.png') }}" alt="Logo" style="width: 100px;">
                     @endif
                 </a>
 
-                <!-- Toggler -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
                     aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <!-- Nav Items -->
                 <div class="collapse navbar-collapse justify-content-end" id="mainNavbar">
                     <ul class="navbar-nav gap-2" id="mainTab" role="tablist">
                         <li class="nav-item">
-                            <a href="{{ route('tenant.home', ['tenant' => $tenant->subdomain]) }}" class="nav-link active rounded-5 decoration-0"
+                            <a href="/" class="nav-link active rounded-5 decoration-0"
                                 style="color: inherit; text-decoration: none;">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('tenant.publications', ['tenant' => $tenant->subdomain]) }}" class="nav-link rounded-5 decoration-0"
+                            <a href="/publications" class="nav-link rounded-5 decoration-0"
                                 style="color: inherit; text-decoration: none;">Publications</a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('tenant.resources', ['tenant' => $tenant->subdomain]) }}" class="nav-link rounded-5 decoration-0"
+                            <a href="/resources" class="nav-link rounded-5 decoration-0"
                                 style="color: inherit; text-decoration: none;">Resources</a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('tenant.blogs', ['tenant' => $tenant->subdomain]) }}" class="nav-link rounded-5 decoration-0"
+                            <a href="/blogs" class="nav-link rounded-5 decoration-0"
                                 style="color: inherit; text-decoration: none;">Blogs</a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('tenant.courses', ['tenant' => $tenant->subdomain]) }}" class="nav-link rounded-5 decoration-0"
+                            <a href="/courses" class="nav-link rounded-5 decoration-0"
                                 style="color: inherit; text-decoration: none;">Courses</a>
                         </li>
                         @if($tenant->orcid_url)
@@ -53,14 +48,21 @@
                         </li>
                         @endif
                         <li class="nav-item">
-                            <a href="{{ route('tenant.login', ['tenant' => $tenant->subdomain]) }}" class="btn btn-primary rounded-pill px-3 py-1 ms-2">Login</a>
+                            @auth
+                                @if(auth()->user()->role === 'admin')
+                                    <a href="/admin/profile" class="btn btn-primary rounded-pill px-3 py-1 ms-2">Dashboard</a>
+                                @else
+                                    <a href="/student/dashboard" class="btn btn-primary rounded-pill px-3 py-1 ms-2">Dashboard</a>
+                                @endif
+                            @else
+                                <a href="/login" class="btn btn-primary rounded-pill px-3 py-1 ms-2">Login</a>
+                            @endauth
                         </li>
                     </ul>
                 </div>
             </nav>
         </div>
 
-        <!-- Indicators -->
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
                 aria-current="true" aria-label="Slide 1"></button>
@@ -70,12 +72,10 @@
                 aria-label="Slide 3"></button>
         </div>
 
-        <!-- Carousel Slides -->
         <div class="carousel-inner">
-            <!-- Slide 1 -->
             <div class="carousel-item active position-relative">
-                @if($tenant->avatar)
-                    <img src="{{ asset('storage/' . $tenant->avatar) }}" class="d-block w-100" alt="Slide 1" />
+                @if($tenant->home_bg_image)
+                    <img src="{{ asset('storage/' . $tenant->home_bg_image) }}" class="d-block w-100" alt="Slide 1" />
                 @else
                     <img src="{{ asset('assets/boy.jpeg') }}" class="d-block w-100" alt="Slide 1" />
                 @endif
@@ -93,7 +93,6 @@
                 </div>
             </div>
 
-            <!-- Slide 2 -->
             <div class="carousel-item position-relative">
                 <img src="{{ asset('assets/group_students.jpeg') }}" class="d-block w-100" alt="Slide 2" />
                 <div class="overlay"></div>
@@ -101,11 +100,10 @@
                     style="transform: translateY(70px);">
                     <h1 class="display-4 fw-bold text-white">All Your Learning Tools <br>In One Place</h1>
                     <p class="lead text-white mb-4">Seamless access to courses, assignments, and resources anytime.</p>
-                    <a href="{{ route('tenant.courses', ['tenant' => $tenant->subdomain]) }}" class="btn btn-primary rounded-pill px-4 py-2">Explore Now</a>
+                    <a href="/courses" class="btn btn-primary rounded-pill px-4 py-2">Explore Now</a>
                 </div>
             </div>
 
-            <!-- Slide 3 -->
             <div class="carousel-item position-relative">
                 <img src="{{ asset('assets/studious_gril.jpg') }}" class="d-block w-100" alt="Slide 3" />
                 <div class="overlay"></div>
@@ -113,12 +111,11 @@
                     style="transform: translateY(70px);">
                     <h1 class="display-4 fw-bold text-white">Empower Students & <br>Educators</h1>
                     <p class="lead text-white mb-4">Collaborate, learn, and grow in a unified academic ecosystem.</p>
-                    <a href="{{ route('tenant.register', ['tenant' => $tenant->subdomain]) }}" class="btn btn-primary rounded-pill px-4 py-2">Get Started</a>
+                    <a href="/register" class="btn btn-primary rounded-pill px-4 py-2">Get Started</a>
                 </div>
             </div>
         </div>
 
-        <!-- Controls -->
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
             data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -131,10 +128,8 @@
         </button>
     </div>
 
-    <!-- Educational Highlights Section -->
     <div class="container mt-4 position-relative " style="transform: translateY(-100px); z-index: 1050;">
         <div class="row g-3 px-3 slide-in">
-            <!-- Book & Library -->
             <div class="col-12 col-md-4">
                 <div class="bg-danger text-white p-4 rounded h-100">
                     <div class="d-flex align-items-center gap-3 mb-3">
@@ -149,7 +144,6 @@
                 </div>
             </div>
 
-            <!-- Special Education -->
             <div class="col-12 col-md-4">
                 <div class="bg-primary text-white p-4 rounded h-100">
                     <div class="d-flex align-items-center gap-3 mb-3">
@@ -163,7 +157,6 @@
                 </div>
             </div>
 
-            <!-- Professional Courses -->
             <div class="col-12 col-md-4">
                 <div class="text-white p-4 rounded h-100" id="professional_course">
                     <div class="d-flex align-items-center gap-3 mb-3">
@@ -179,11 +172,9 @@
         </div>
     </div>
 
-    <!-- owner section -->
     <div class="container my-5 p-5 rounded" id="owner"
         style="background-color: rgb(239, 238, 238); transform: translateY(-70px);">
         <div class="row align-items-center">
-            <!-- Owner Image -->
             <div class="col-12 col-lg-4 text-center mb-4 mb-lg-0">
                 @if($tenant->avatar)
                     <img src="{{ asset('storage/' . $tenant->avatar) }}" alt="{{ $tenant->owner_name }}" class="owner-img shadow-lg">
@@ -192,13 +183,11 @@
                 @endif
             </div>
 
-            <!-- Owner Details -->
             <div class="col-12 col-lg-8">
                 <h2 class="fw-bold mb-2">{{ $tenant->owner_name }}</h2>
                 <h5 class="text-muted mb-3">Researcher & Founder</h5>
                 <p class="lead fs-6">{{ Str::limit($tenant->bio, 180) }}</p>
 
-                <!-- CTA Buttons -->
                 <div class="d-flex flex-wrap gap-3 mt-4">
                     @if($tenant->phone)
                     <a href="tel:{{ $tenant->phone }}" class="btn btn-danger rounded-pill px-4">
@@ -219,7 +208,6 @@
         </div>
     </div>
 
-    <!-- About Owner Modal -->
     <div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="aboutModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content rounded-4 shadow-lg m-2">
@@ -239,14 +227,10 @@
         </div>
     </div>
 
-    <!-- WHAT WE OFFER -->
     <section class="container mb-5" id="box_overlay">
         <div class="row g-5">
-            <!-- Text Column -->
-            <div class="col-12 col-lg-7 pe-lg-5 px-5"> <!-- extra padding end on large screens -->
-                <h2 class="mb-4" style="color: rgb(36, 56, 111);">What We Offer</h2>
+            <div class="col-12 col-lg-7 pe-lg-5 px-5"> <h2 class="mb-4" style="color: rgb(36, 56, 111);">What We Offer</h2>
 
-                <!-- Intro Paragraph -->
                 <p style="text-align: justify;">
                     Our academic suite is designed to provide a comprehensive platform that empowers students,
                     educators, and institutions.
@@ -254,7 +238,6 @@
                     that transform traditional learning into a modern, connected experience.
                 </p>
 
-                <!-- Benefits List -->
                 <ul class="list-unstyled mx-0" style="text-align: justify; max-width: 650px;">
                     <li class="mb-2 d-flex align-items-start gap-2">
                         <span class="text-primary fw-bold">✔️</span>
@@ -279,7 +262,6 @@
                 </ul>
             </div>
 
-            <!-- Image Column -->
             <div class="col-12 col-lg-5 text-center text-lg-end px-5">
                 <img src="{{ asset('assets/library.jpeg') }}" alt="What we offer" class="img-fluid rounded shadow"
                     style="max-width: 100%; height: auto;">
@@ -287,7 +269,6 @@
         </div>
     </section>
 
-    <!-- Featured Blog -->
     @if($blogs && $blogs->count() > 0)
     <section style="background-color: rgb(249, 245, 245);" class="p-4">
         <div class="container my-5">
@@ -305,7 +286,7 @@
                             <h5 class="card-title">{{ $blog->title }}</h5>
                             <p class="card-text flex-grow-1">{{ Str::limit($blog->excerpt ?? wp_strip_all_tags($blog->content), 100) }}</p>
                             <div class="mt-auto">
-                                <a href="{{ route('tenant.blogs.show', ['tenant' => $tenant->subdomain, 'blog' => $blog->id]) }}" class="btn btn-outline-primary btn-sm">Read More</a>
+                                <a href="/blogs/{{ $blog->id }}" class="btn btn-outline-primary btn-sm">Read More</a>
                             </div>
                         </div>
                     </div>
@@ -316,19 +297,15 @@
     </section>
     @endif
 
-    <!-- WHAT STUDENTS SAY -->
     <section class="py-5 position-relative text-white" id="testimonial" style="background-image: url('{{ asset('assets/young-student-learning-library.jpg') }}');">
-        <!-- Red Overlay -->
         <div class="position-absolute top-0 start-0 w-100 h-100 bg-danger opacity-75"></div>
 
-        <!-- Content -->
         <div class="container position-relative text-center">
             <h3 class="mb-5 fw-bold display-4 display-md-5 display-lg-4 text-center">
                 What Students Say About Us
             </h3>
 
             <div class="container row mx-auto g-4 justify-content-center" style="overflow-x: hidden;">
-                <!-- Testimonial 1 -->
                 <div class="col-md-5">
                     <div class="bg-white text-dark p-4 rounded shadow">
                         <img src="{{ asset('assets/girl.jpeg') }}" alt="Student Photo" class="rounded-circle mx-auto d-block mb-3"
@@ -339,7 +316,6 @@
                     </div>
                 </div>
 
-                <!-- Testimonial 2 -->
                 <div class="col-md-5">
                     <div class="bg-white text-dark p-4 rounded shadow">
                         <img src="{{ asset('assets/boy.jpeg') }}" alt="Student Photo" class="rounded-circle mx-auto d-block mb-3"
@@ -353,14 +329,11 @@
         </div>
     </section>
 
-    <!-- REQUEST A RESOURCE SECTION -->
     <section class="position-relative text-white">
-        <!-- Background Image -->
         <div class="position-absolute top-0 start-0 w-100 h-100" style="z-index: -2; background-color: rgb(243, 243, 243);"></div>
 
         <div class="container py-5 px-5">
             <div class="row align-items-center" style="overflow-x: hidden;">
-                <!-- Left text -->
                 <div class="col-lg-6 mb-4 mb-lg-0">
                     <h2 class="fw-bold mb-3 " style="color: rgb(36, 56, 111);">Request A Resource</h2>
                     <p class="mb-0 text-dark">
@@ -369,14 +342,13 @@
                     </p>
                 </div>
 
-                <!-- Right form -->
                 <div class="col-lg-6">
                     @if(session('success'))
                         <div class="alert alert-success fs-6 text-dark border-0 rounded-3 mb-4 shadow-sm">
                             <i class="bi bi-check-circle-fill text-success me-2"></i> {{ session('success') }}
                         </div>
                     @endif
-                    <form action="{{ route('tenant.resource.request', ['tenant' => $tenant->subdomain]) }}" method="POST" class="row g-3 g-lg-4 justify-content-center">
+                    <form action="/resource-request" method="POST" class="row g-3 g-lg-4 justify-content-center">
                         @csrf
                         <div class="col-md-6 ">
                             <input type="text" name="first_name" required
@@ -415,11 +387,9 @@
         </div>
     </section>
 
-    <!-- FOOTER SECTION -->
     <footer class="bg-dark text-light pt-5 pb-4">
         <div class="container px-5">
             <div class="row">
-                <!-- Contact Info -->
                 <div class="col-md-4 mb-4">
                     <h5 class="fw-bold mb-3">Have Questions?</h5>
                     <ul class="list-unstyled">
@@ -444,22 +414,20 @@
                     </ul>
                 </div>
 
-                <!-- Links -->
                 <div class="col-md-4 mb-4">
                     <h5 class="fw-bold mb-3">Links</h5>
                     <ul class="list-unstyled">
-                        <li><a href="{{ route('tenant.home', ['tenant' => $tenant->subdomain]) }}" class="text-light text-decoration-none">Home</a></li>
-                        <li><a href="{{ route('tenant.publications', ['tenant' => $tenant->subdomain]) }}" class="text-light text-decoration-none">Publications</a></li>
-                        <li><a href="{{ route('tenant.resources', ['tenant' => $tenant->subdomain]) }}" class="text-light text-decoration-none">Resources</a></li>
-                        <li><a href="{{ route('tenant.blogs', ['tenant' => $tenant->subdomain]) }}" class="text-light text-decoration-none">Blog</a></li>
-                        <li><a href="{{ route('tenant.courses', ['tenant' => $tenant->subdomain]) }}" class="text-light text-decoration-none">Courses</a></li>
+                        <li><a href="/" class="text-light text-decoration-none">Home</a></li>
+                        <li><a href="/publications" class="text-light text-decoration-none">Publications</a></li>
+                        <li><a href="/resources" class="text-light text-decoration-none">Resources</a></li>
+                        <li><a href="/blogs" class="text-light text-decoration-none">Blog</a></li>
+                        <li><a href="/courses" class="text-light text-decoration-none">Courses</a></li>
                         @if($tenant->orcid_url)
                         <li><a href="{{ $tenant->orcid_url }}" target="_blank" class="text-light text-decoration-none">ORCID</a></li>
                         @endif
                     </ul>
                 </div>
 
-                <!-- Connect/Subscribe -->
                 <div class="col-md-4 mb-4">
                     <h5 class="fw-bold mb-3">Connect With Us</h5>
                     @if(is_array($tenant->social_links) && count($tenant->social_links))

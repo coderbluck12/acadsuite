@@ -62,6 +62,11 @@
         {{-- Form section --}}
         <div class="col-md-4 form-section">
             <div class="login-container">
+                <div class="mb-3">
+                    <a href="/" class="text-decoration-none text-muted fw-semibold">
+                        &larr; Back to Home
+                    </a>
+                </div>
                 <div class="mb-4 text-start">
                     @if($tenant->avatar)
                         <img src="{{ asset('storage/' . $tenant->avatar) }}" alt="Logo" width="100">
@@ -79,7 +84,8 @@
                     <div class="alert alert-success py-2">{{ session('success') }}</div>
                 @endif
 
-                <form method="POST" action="{{ route('tenant.login.post', ['tenant' => $tenant->subdomain]) }}">
+                {{-- FIX: Using relative path for form action --}}
+                <form method="POST" action="/login">
                     @csrf
                     <div class="mb-3">
                         <label class="form-label">Email Address</label>
@@ -96,7 +102,8 @@
                     <button type="submit" class="btn btn-primary btn-custom w-100">Sign in</button>
                     <div class="text-center mt-3">
                         <p class="mb-0">Don't have an account yet?
-                            <a href="{{ route('tenant.register', ['tenant' => $tenant->subdomain]) }}" class="fw-semibold text-decoration-none">Sign up</a>
+                            {{-- FIX: Updated to /register to match your web.php --}}
+                            <a href="/register" class="fw-semibold text-decoration-none">Sign up</a>
                         </p>
                     </div>
                 </form>

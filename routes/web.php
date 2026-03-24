@@ -32,6 +32,7 @@ $tenantRoutes = function () {
     // ----- Public Pages -----
     Route::get('/', [HomeController::class, 'index'])->name('tenant.home');
     Route::get('/publications', [PublicationController::class, 'index'])->name('tenant.publications');
+    Route::get('/publications/{publication}', [PublicationController::class, 'show'])->name('tenant.publications.show');
     Route::get('/courses', [CourseController::class, 'index'])->name('tenant.courses');
     Route::get('/courses/{course}', [CourseController::class, 'show'])->name('tenant.courses.show');
     Route::get('/blogs', [BlogController::class, 'index'])->name('tenant.blogs');

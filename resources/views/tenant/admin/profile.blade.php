@@ -20,9 +20,23 @@
                 @endif
             </div>
 
-            <div class="mb-4">
-                <label class="form-label fw-semibold">Change Profile Picture</label>
-                <input type="file" name="avatar" class="form-control form-control-sm" accept="image/*">
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Change Profile Picture</label>
+                    <input type="file" name="avatar" class="form-control form-control-sm" accept="image/*">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Account Logo (Public Portal)</label>
+                    <input type="file" name="logo" class="form-control form-control-sm" accept="image/*">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Dashboard Background Image</label>
+                    <input type="file" name="dashboard_bg_image" class="form-control form-control-sm" accept="image/*">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Home Page Background Image</label>
+                    <input type="file" name="home_bg_image" class="form-control form-control-sm" accept="image/*">
+                </div>
             </div>
             <div class="row g-3 mb-3">
                 <div class="col-md-6">

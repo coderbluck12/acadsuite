@@ -26,19 +26,19 @@
                 <div class="collapse navbar-collapse justify-content-end" id="mainNavbar">
                     <ul class="navbar-nav gap-2" id="mainTab" role="tablist">
                         <li class="nav-item">
-                            <a href="{{ route('tenant.home', ['tenant' => $tenant->subdomain]) }}" class="nav-link rounded-5" style="color: inherit; text-decoration: none;">Home</a>
+                            <a href="/" class="nav-link rounded-5" style="color: inherit; text-decoration: none;">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('tenant.publications', ['tenant' => $tenant->subdomain]) }}" class="nav-link active rounded-5" style="color: inherit; text-decoration: none; background-color: #dc3545; padding-inline: 20px;">Publications</a>
+                            <a href="/publications" class="nav-link active rounded-5" style="color: inherit; text-decoration: none; background-color: #dc3545; padding-inline: 20px;">Publications</a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('tenant.resources', ['tenant' => $tenant->subdomain]) }}" class="nav-link rounded-5" style="color: inherit; text-decoration: none;">Resources</a>
+                            <a href="/resources" class="nav-link rounded-5" style="color: inherit; text-decoration: none;">Resources</a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('tenant.blogs', ['tenant' => $tenant->subdomain]) }}" class="nav-link rounded-5" style="color: inherit; text-decoration: none;">Blogs</a>
+                            <a href="/blogs" class="nav-link rounded-5" style="color: inherit; text-decoration: none;">Blogs</a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('tenant.courses', ['tenant' => $tenant->subdomain]) }}" class="nav-link rounded-5" style="color: inherit; text-decoration: none;">Courses</a>
+                            <a href="/courses" class="nav-link rounded-5" style="color: inherit; text-decoration: none;">Courses</a>
                         </li>
                         @if($tenant->orcid_url)
                         <li class="nav-item">
@@ -46,7 +46,7 @@
                         </li>
                         @endif
                         <li class="nav-item">
-                            <a href="{{ route('tenant.login', ['tenant' => $tenant->subdomain]) }}" class="btn btn-primary rounded-pill px-3 py-1 ms-2">Login</a>
+                            <a href="/login" class="btn btn-primary rounded-pill px-3 py-1 ms-2">Login</a>
                         </li>
                     </ul>
                 </div>
@@ -102,16 +102,10 @@
                                 {{ Str::limit($publication->abstract ?? $publication->description, 200) }}
                             </p>
                         </div>
-                        <div class="card-footer bg-white border-0 pt-0 d-flex justify-content-between align-items-center">
-                            @if($publication->file_path)
-                            <a href="{{ asset('storage/' . $publication->file_path) }}" target="_blank" class="btn btn-success btn-sm">
-                                <i class="bi bi-download"></i> Download
+                        <div class="card-footer bg-white border-0 pt-0">
+                            <a href="{{ route('tenant.publications.show', ['tenant' => $tenant->subdomain, 'publication' => $publication->id]) }}" class="btn btn-primary w-100 btn-sm rounded-pill">
+                                View Details
                             </a>
-                            @else
-                            <a href="#" class="btn btn-secondary btn-sm disabled">
-                                <i class="bi bi-eye-slash"></i> View Only
-                            </a>
-                            @endif
                         </div>
                     </div>
                 </div>

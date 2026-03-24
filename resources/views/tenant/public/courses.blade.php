@@ -19,15 +19,15 @@
                 </button>
                 <div class="collapse navbar-collapse justify-content-end" id="mainNavbar">
                     <ul class="navbar-nav gap-2" id="mainTab" role="tablist">
-                        <li class="nav-item"><a href="{{ route('tenant.home', ['tenant' => $tenant->subdomain]) }}" class="nav-link rounded-5" style="color: inherit; text-decoration: none;">Home</a></li>
-                        <li class="nav-item"><a href="{{ route('tenant.publications', ['tenant' => $tenant->subdomain]) }}" class="nav-link rounded-5" style="color: inherit; text-decoration: none;">Publications</a></li>
-                        <li class="nav-item"><a href="{{ route('tenant.resources', ['tenant' => $tenant->subdomain]) }}" class="nav-link rounded-5" style="color: inherit; text-decoration: none;">Resources</a></li>
-                        <li class="nav-item"><a href="{{ route('tenant.blogs', ['tenant' => $tenant->subdomain]) }}" class="nav-link rounded-5" style="color: inherit; text-decoration: none;">Blogs</a></li>
-                        <li class="nav-item"><a href="{{ route('tenant.courses', ['tenant' => $tenant->subdomain]) }}" class="nav-link active rounded-5" style="color: inherit; text-decoration: none; background-color: #dc3545; padding-inline: 20px;">Courses</a></li>
+                        <li class="nav-item"><a href="/home" class="nav-link rounded-5" style="color: inherit; text-decoration: none;">Home</a></li>
+                        <li class="nav-item"><a href="/publications" class="nav-link rounded-5" style="color: inherit; text-decoration: none;">Publications</a></li>
+                        <li class="nav-item"><a href="/resources" class="nav-link rounded-5" style="color: inherit; text-decoration: none;">Resources</a></li>
+                        <li class="nav-item"><a href="/blogs" class="nav-link rounded-5" style="color: inherit; text-decoration: none;">Blogs</a></li>
+                        <li class="nav-item"><a href="/courses" class="nav-link active rounded-5" style="color: inherit; text-decoration: none; background-color: #dc3545; padding-inline: 20px;">Courses</a></li>
                         @if($tenant->orcid_url)
                         <li class="nav-item"><a href="{{ $tenant->orcid_url }}" target="_blank" class="nav-link rounded-5" style="color: inherit; text-decoration: none;">ORCID</a></li>
                         @endif
-                        <li class="nav-item"><a href="{{ route('tenant.login', ['tenant' => $tenant->subdomain]) }}" class="btn btn-primary rounded-pill px-3 py-1 ms-2">Login</a></li>
+                        <li class="nav-item"><a href="/login" class="btn btn-primary rounded-pill px-3 py-1 ms-2">Login</a></li>
                     </ul>
                 </div>
             </nav>

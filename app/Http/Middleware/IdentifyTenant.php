@@ -6,6 +6,7 @@ use App\Models\Tenant;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\URL; // <-- ADDED THIS IMPORT
 
 class IdentifyTenant
 {
@@ -33,6 +34,10 @@ class IdentifyTenant
 
             app()->instance('currentTenant', $tenant);
             view()->share('tenant', $tenant);
+            
+            // THE MAGIC FIX FOR LOCALHOST
+            URL::forceRootUrl($request->getSchemeAndHttpHost());
+            
             return $next($request);
         }
 
@@ -61,6 +66,10 @@ class IdentifyTenant
 
         app()->instance('currentTenant', $tenant);
         view()->share('tenant', $tenant);
+
+        // THE MAGIC FIX FOR PRODUCTION:
+        // This forces Laravel to use the current subdomain for EVERY route(), redirect(), and form action!
+        URL::forceRootUrl($request->getSchemeAndHttpHost());
 
         return $next($request);
     }

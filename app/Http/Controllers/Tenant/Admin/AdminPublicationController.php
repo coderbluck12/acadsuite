@@ -38,10 +38,16 @@ class AdminPublicationController extends Controller
             'url'          => 'nullable|url',
             'cover_image'  => 'nullable|image|max:2048',
             'is_published' => 'boolean',
+            'access_type'  => 'required|in:view,download',
+            'file_path'    => 'nullable|file|mimes:pdf,doc,docx|max:10240',
         ]);
 
         if ($request->hasFile('cover_image')) {
             $validated['cover_image'] = $request->file('cover_image')->store('publications', 'public');
+        }
+        
+        if ($request->hasFile('file_path')) {
+            $validated['file_path'] = $request->file('file_path')->store('publications_files', 'public');
         }
 
         Publication::create($validated);
@@ -64,11 +70,18 @@ class AdminPublicationController extends Controller
             'url'          => 'nullable|url',
             'cover_image'  => 'nullable|image|max:2048',
             'is_published' => 'boolean',
+            'access_type'  => 'required|in:view,download',
+            'file_path'    => 'nullable|file|mimes:pdf,doc,docx|max:10240',
         ]);
 
         if ($request->hasFile('cover_image')) {
             if ($publication->cover_image) Storage::disk('public')->delete($publication->cover_image);
             $validated['cover_image'] = $request->file('cover_image')->store('publications', 'public');
+        }
+
+        if ($request->hasFile('file_path')) {
+            if ($publication->file_path) Storage::disk('public')->delete($publication->file_path);
+            $validated['file_path'] = $request->file('file_path')->store('publications_files', 'public');
         }
 
         $publication->update($validated);
