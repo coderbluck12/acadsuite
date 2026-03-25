@@ -24,6 +24,13 @@
         <i class="bi bi-star-fill me-2"></i> Plans & Billing
     </a>
     <hr class="border-white opacity-25 mx-3">
+    <a href="/admin/products" class="{{ request()->routeIs('tenant.admin.products*') ? 'active' : '' }} m-2">
+        <i class="bi bi-cart3 me-2"></i> Marketplace
+    </a>
+    <a href="/admin/wallet" class="{{ request()->routeIs('tenant.admin.wallet*') ? 'active' : '' }} m-2">
+        <i class="bi bi-wallet2 me-2"></i> Wallet
+    </a>
+    <hr class="border-white opacity-25 mx-3">
     <a href="/" class="m-2" target="_blank">
         <i class="bi bi-box-arrow-up-right me-2"></i> View Portal
     </a>

@@ -11,6 +11,8 @@ use App\Http\Controllers\Tenant\Public\PublicationController;
 use App\Http\Controllers\Tenant\Public\CourseController;
 use App\Http\Controllers\Tenant\Public\BlogController;
 use App\Http\Controllers\Tenant\Public\ResourceController as PublicResourceController;
+use App\Http\Controllers\Tenant\Public\MarketplaceController;
+use App\Http\Controllers\Tenant\Public\CheckoutController;
 use App\Http\Controllers\Tenant\Admin\ProfileController;
 use App\Http\Controllers\Tenant\Admin\StudentController;
 use App\Http\Controllers\Tenant\Admin\AdminPublicationController;
@@ -18,6 +20,8 @@ use App\Http\Controllers\Tenant\Admin\AdminResourceController;
 use App\Http\Controllers\Tenant\Admin\AdminCourseController;
 use App\Http\Controllers\Tenant\Admin\AdminBlogController;
 use App\Http\Controllers\Tenant\Admin\AdminAssignmentController;
+use App\Http\Controllers\Tenant\Admin\AdminProductController;
+use App\Http\Controllers\Tenant\Admin\AdminWalletController;
 use App\Http\Controllers\Tenant\Student\StudentDashboardController;
 use App\Http\Controllers\Tenant\Student\StudentNotificationController;
 use App\Http\Controllers\Tenant\Student\StudentAssignmentController;
@@ -39,6 +43,14 @@ $tenantRoutes = function () {
     Route::get('/blogs/{blog}', [BlogController::class, 'show'])->name('tenant.blogs.show');
     Route::get('/resources', [PublicResourceController::class, 'index'])->name('tenant.resources');
     Route::post('/resource-request', [PublicResourceController::class, 'request'])->name('tenant.resource.request');
+    
+    // ----- Marketplace & Checkout -----
+    Route::get('/marketplace', [MarketplaceController::class, 'index'])->name('tenant.marketplace.index');
+    Route::get('/marketplace/{product}', [MarketplaceController::class, 'show'])->name('tenant.marketplace.show');
+    Route::get('/checkout/{product}', [CheckoutController::class, 'checkout'])->name('tenant.checkout.index');
+    Route::get('/checkout/verify', [CheckoutController::class, 'verify'])->name('tenant.checkout.verify');
+    Route::get('/checkout/{product}/success', [CheckoutController::class, 'success'])->name('tenant.checkout.success');
+    Route::get('/checkout/{product}/download', [CheckoutController::class, 'download'])->name('tenant.checkout.download');
 
     // ----- Auth -----
     Route::get('/login', [TenantAuthController::class, 'showLogin'])->name('tenant.login');
@@ -62,6 +74,10 @@ $tenantRoutes = function () {
         Route::resource('blogs', AdminBlogController::class, ['as' => 'tenant.admin']);
         Route::resource('assignments', AdminAssignmentController::class, ['as' => 'tenant.admin']);
         Route::patch('assignments/{assignment}/submissions/{submission}/grade', [AdminAssignmentController::class, 'grade'])->name('tenant.admin.assignments.grade');
+        
+        Route::resource('products', AdminProductController::class, ['as' => 'tenant.admin']);
+        Route::get('/wallet', [AdminWalletController::class, 'index'])->name('tenant.admin.wallet');
+        Route::post('/wallet/withdraw', [AdminWalletController::class, 'withdraw'])->name('tenant.admin.wallet.withdraw');
         
         Route::get('/plans', [\App\Http\Controllers\Tenant\Admin\AdminPlanController::class, 'index'])->name('tenant.admin.plans');
     });
