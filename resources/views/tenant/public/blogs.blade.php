@@ -39,6 +39,9 @@
                         <li class="nav-item">
                             <a href="/courses" class="nav-link rounded-5" style="color: inherit; text-decoration: none;">Courses</a>
                         </li>
+                        <li class="nav-item">
+                            <a href="/marketplace" class="nav-link rounded-5" style="color: inherit; text-decoration: none;">Store</a>
+                        </li>
                         @if($tenant->orcid_url)
                         <li class="nav-item">
                             <a href="{{ $tenant->orcid_url }}" target="_blank" class="nav-link rounded-5" style="color: inherit; text-decoration: none;">ORCID</a>
