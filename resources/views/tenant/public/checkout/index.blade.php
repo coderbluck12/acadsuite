@@ -69,7 +69,8 @@
             callback: function(response) {
                 // Payment was successful, verify on backend
                 let reference = response.reference;
-                let verifyUrl = "{{ route('tenant.checkout.verify', ['tenant' => $tenant->subdomain]) }}?reference=" + reference + "&product_id={{ $product->id }}";
+                let email = document.getElementById('email-address').value;
+                let verifyUrl = "{{ route('tenant.checkout.verify', ['tenant' => $tenant->subdomain]) }}?reference=" + reference + "&product_id={{ $product->id }}&email=" + encodeURIComponent(email);
                 window.location.href = verifyUrl;
             },
             onClose: function() {

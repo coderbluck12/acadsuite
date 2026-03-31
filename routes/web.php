@@ -22,6 +22,7 @@ use App\Http\Controllers\Tenant\Admin\AdminBlogController;
 use App\Http\Controllers\Tenant\Admin\AdminAssignmentController;
 use App\Http\Controllers\Tenant\Admin\AdminProductController;
 use App\Http\Controllers\Tenant\Admin\AdminWalletController;
+use App\Http\Controllers\Tenant\Admin\AdminPurchaseController;
 use App\Http\Controllers\Tenant\Student\StudentDashboardController;
 use App\Http\Controllers\Tenant\Student\StudentNotificationController;
 use App\Http\Controllers\Tenant\Student\StudentAssignmentController;
@@ -47,10 +48,11 @@ $tenantRoutes = function () {
     // ----- Marketplace & Checkout -----
     Route::get('/marketplace', [MarketplaceController::class, 'index'])->name('tenant.marketplace.index');
     Route::get('/marketplace/{product}', [MarketplaceController::class, 'show'])->name('tenant.marketplace.show');
-    Route::get('/checkout/verify', [CheckoutController::class, 'verify'])->name('tenant.checkout.verify');
     Route::get('/checkout/{product}', [CheckoutController::class, 'checkout'])->name('tenant.checkout.index');
-    Route::get('/checkout/{product}/success', [CheckoutController::class, 'success'])->name('tenant.checkout.success');
-    Route::get('/checkout/{product}/download', [CheckoutController::class, 'download'])->name('tenant.checkout.download');
+    Route::get('/checkout-verify', [CheckoutController::class, 'verify'])->name('tenant.checkout.verify');
+    Route::get('/checkout-success/{product}', [CheckoutController::class, 'success'])->name('tenant.checkout.success');
+    Route::get('/checkout-download/{product}', [CheckoutController::class, 'download'])->name('tenant.checkout.download');
+    Route::get('/checkout-receipt/{purchase}', [CheckoutController::class, 'receipt'])->name('tenant.checkout.receipt');
 
     // ----- Auth -----
     Route::get('/login', [TenantAuthController::class, 'showLogin'])->name('tenant.login');
@@ -83,6 +85,7 @@ $tenantRoutes = function () {
         
         Route::resource('products', AdminProductController::class, ['as' => 'tenant.admin']);
         Route::get('/wallet', [AdminWalletController::class, 'index'])->name('tenant.admin.wallet');
+        Route::get('/purchases', [AdminPurchaseController::class, 'index'])->name('tenant.admin.purchases.index');
         Route::post('/wallet/withdraw', [AdminWalletController::class, 'withdraw'])->name('tenant.admin.wallet.withdraw');
         
         Route::get('/plans', [\App\Http\Controllers\Tenant\Admin\AdminPlanController::class, 'index'])->name('tenant.admin.plans');

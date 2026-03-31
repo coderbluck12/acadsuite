@@ -22,6 +22,7 @@ class Tenant extends Model
         'address',
         'social_links',
         'plan',
+        'wallet_balance',
         'is_active',
         'approved_at',
     ];

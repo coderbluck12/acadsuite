@@ -39,8 +39,13 @@
                 </div>
             @endif
 
-            <div class="mt-4">
-                <a href="{{ route('tenant.marketplace.index', ['tenant' => $tenant->subdomain]) }}" class="btn btn-outline-primary rounded-pill px-4">Continue Shopping</a>
+            <div class="mt-4 d-flex justify-content-center gap-2 flex-wrap">
+                @if(isset($purchase))
+                    <a href="{{ route('tenant.checkout.receipt', ['tenant' => $tenant->subdomain, 'purchase' => $purchase->id]) }}" target="_blank" class="btn btn-primary rounded-pill px-4">
+                        <i class="bi bi-receipt me-2"></i> View/Print Receipt
+                    </a>
+                @endif
+                <a href="{{ route('tenant.marketplace.index', ['tenant' => $tenant->subdomain]) }}" class="btn btn-outline-secondary rounded-pill px-4">Continue Shopping</a>
             </div>
         </div>
     </div>

@@ -8,6 +8,7 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Purchase;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class CheckoutController extends Controller
@@ -27,6 +28,8 @@ class CheckoutController extends Controller
     {
         $reference = $request->get('reference');
         $productId = $request->get('product_id');
+        $email = $request->get('email'); // Can be passed from frontend
+
         
         if (!$reference || !$productId) {
             return redirect()->route('tenant.marketplace.index', ['tenant' => app('currentTenant')->subdomain])
@@ -52,6 +55,25 @@ class CheckoutController extends Controller
             // Check if transaction already recorded to prevent double crediting
             $exists = Transaction::where('reference', $reference)->exists();
             
+            // If email wasn't provided, try to extract from Paystack response
+            if (!$email && isset($response) && $response->successful()) {
+                $email = $response->json('data.customer.email') ?? 'guest@example.com';
+            } elseif (!$email) {
+                $email = auth()->check() ? auth()->user()->email : 'guest@example.com';
+            }
+            
+            // Track the specific product purchase
+            $purchase = Purchase::firstOrCreate(
+                ['reference' => $reference],
+                [
+                    'tenant_id' => $tenant->id,
+                    'product_id' => $product->id,
+                    'user_id' => auth()->id(),
+                    'buyer_email' => $email,
+                    'amount' => $product->price,
+                ]
+            );
+
             if (!$exists) {
                 // Credit Tenant's Wallet
                 $tenant->increment('wallet_balance', $product->price);
@@ -71,6 +93,7 @@ class CheckoutController extends Controller
             return redirect()->route('tenant.checkout.success', [
                 'tenant' => $tenant->subdomain, 
                 'product' => $product->id, 
+                'purchase' => $purchase->id,
                 'reference' => $reference
             ]);
         }
@@ -83,8 +106,22 @@ class CheckoutController extends Controller
     {
         $tenant = app('currentTenant');
         $reference = $request->get('reference');
+        $purchaseId = $request->get('purchase');
+        $purchase = $purchaseId ? Purchase::find($purchaseId) : null;
 
-        return view('tenant.public.checkout.success', compact('tenant', 'product', 'reference'));
+        return view('tenant.public.checkout.success', compact('tenant', 'product', 'reference', 'purchase'));
+    }
+
+    public function receipt(Purchase $purchase)
+    {
+        $tenant = app('currentTenant');
+        
+        // Security check
+        if ($purchase->tenant_id != $tenant->id) {
+            abort(404);
+        }
+
+        return view('tenant.public.checkout.receipt', compact('tenant', 'purchase'));
     }
 
     public function download(Product $product)

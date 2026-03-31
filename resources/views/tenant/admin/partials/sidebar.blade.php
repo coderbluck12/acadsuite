@@ -27,6 +27,14 @@
     <a href="/admin/products" class="{{ request()->routeIs('tenant.admin.products*') ? 'active' : '' }} m-2">
         <i class="bi bi-cart3 me-2"></i> Marketplace
     </a>
+    <a href="/admin/purchases" class="{{ request()->routeIs('tenant.admin.purchases*') ? 'active' : '' }} m-2">
+        <div class="card bg-transparent border-0 rounded">
+            <div class="card-body py-2 px-3 text-secondary d-flex align-items-center gap-2">
+                <i class="bi bi-cart3"></i> 
+                <span class="d-none d-md-inline">Purchases</span>
+            </div>
+        </div>
+    </a>
     <a href="/admin/wallet" class="{{ request()->routeIs('tenant.admin.wallet*') ? 'active' : '' }} m-2">
         <i class="bi bi-wallet2 me-2"></i> Wallet
     </a>
