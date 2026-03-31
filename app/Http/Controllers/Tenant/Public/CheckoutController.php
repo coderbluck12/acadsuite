@@ -29,8 +29,9 @@ class CheckoutController extends Controller
         $reference = $request->get('reference');
         $productId = $request->get('product_id');
         $email = $request->get('email'); // Can be passed from frontend
-
         
+        \Illuminate\Support\Facades\Log::info("Checkout Verify Started", ['ref' => $reference, 'product_id' => $productId, 'email' => $email]);
+
         if (!$reference || !$productId) {
             return redirect()->route('tenant.marketplace.index', ['tenant' => app('currentTenant')->subdomain])
                 ->with('error', 'Invalid payment reference.');
@@ -42,60 +43,70 @@ class CheckoutController extends Controller
         // Verify with Paystack
         $secretKey = env('PAYSTACK_SECRET_KEY');
         if (!$secretKey) {
-            // For local development without Paystack keys
             $paymentSuccessful = true;
+            \Illuminate\Support\Facades\Log::info("Checkout Verify bypass (No Secret Key)");
         } else {
             $response = Http::withToken($secretKey)
                 ->get("https://api.paystack.co/transaction/verify/{$reference}");
                 
             $paymentSuccessful = $response->successful() && $response->json('data.status') === 'success';
+            \Illuminate\Support\Facades\Log::info("Paystack Verify API", ['status' => $paymentSuccessful, 'body' => $response->json()]);
         }
 
         if ($paymentSuccessful) {
-            // Check if transaction already recorded to prevent double crediting
-            $exists = Transaction::where('reference', $reference)->exists();
-            
-            // If email wasn't provided, try to extract from Paystack response
-            if (!$email && isset($response) && $response->successful()) {
-                $email = $response->json('data.customer.email') ?? 'guest@example.com';
-            } elseif (!$email) {
-                $email = auth()->check() ? auth()->user()->email : 'guest@example.com';
-            }
-            
-            // Track the specific product purchase
-            $purchase = Purchase::firstOrCreate(
-                ['reference' => $reference],
-                [
-                    'tenant_id' => $tenant->id,
-                    'product_id' => $product->id,
-                    'user_id' => auth()->id(),
-                    'buyer_email' => $email,
-                    'amount' => $product->price,
-                ]
-            );
+            try {
+                // If email wasn't provided, try to extract from Paystack response
+                if (!$email && isset($response) && $response->successful()) {
+                    $email = $response->json('data.customer.email') ?? 'guest@example.com';
+                } elseif (!$email) {
+                    $email = auth()->check() ? auth()->user()->email : 'guest@example.com';
+                }
+                
+                // Track the specific product purchase
+                $purchase = Purchase::firstOrCreate(
+                    ['reference' => $reference],
+                    [
+                        'tenant_id' => $tenant->id,
+                        'product_id' => $product->id,
+                        'user_id' => auth()->id(),
+                        'buyer_email' => $email,
+                        'amount' => $product->price,
+                    ]
+                );
 
-            if (!$exists) {
-                // Credit Tenant's Wallet
-                $tenant->increment('wallet_balance', $product->price);
+                // Check if transaction already recorded to prevent double crediting
+                $exists = Transaction::where('reference', $reference)->exists();
+                
+                if (!$exists) {
+                    // Credit Tenant's Wallet
+                    $tenant->increment('wallet_balance', $product->price);
 
-                // Record Transaction
-                Transaction::create([
-                    'tenant_id' => $tenant->id,
-                    'user_id' => auth()->id(), // null if guest checkout is allowed
-                    'type' => 'credit',
-                    'amount' => $product->price,
-                    'reference' => $reference,
-                    'status' => 'completed',
-                    'description' => "Sale of product: {$product->title}",
+                    // Record Transaction
+                    Transaction::create([
+                        'tenant_id' => $tenant->id,
+                        'user_id' => auth()->id(),
+                        'type' => 'credit',
+                        'amount' => $product->price,
+                        'reference' => $reference,
+                        'status' => 'completed',
+                        'description' => "Sale of product: {$product->title}",
+                    ]);
+                }
+
+                \Illuminate\Support\Facades\Log::info("Checkout Verify Success Database Operations Completed", ['purchase_id' => $purchase->id]);
+
+                return redirect()->route('tenant.checkout.success', [
+                    'tenant' => $tenant->subdomain, 
+                    'product' => $product->id, 
+                    'purchase' => $purchase->id,
+                    'reference' => $reference
                 ]);
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error("Checkout Verify DB Error", ['msg' => $e->getMessage()]);
+                // If it fails, log the error but we might still want to let them know
+                return redirect()->route('tenant.marketplace.show', ['tenant' => $tenant->subdomain, 'product' => $product->id])
+                    ->with('error', 'Payment succeeded but failed to record the transaction securely. Please contact support.');
             }
-
-            return redirect()->route('tenant.checkout.success', [
-                'tenant' => $tenant->subdomain, 
-                'product' => $product->id, 
-                'purchase' => $purchase->id,
-                'reference' => $reference
-            ]);
         }
 
         return redirect()->route('tenant.marketplace.show', ['tenant' => $tenant->subdomain, 'product' => $product->id])
