@@ -122,6 +122,9 @@ $superAdminRoutes = function () {
         Route::patch('/academics/{tenant}/toggle', [AcademicsController::class, 'toggle'])->name('superadmin.academics.toggle');
         Route::patch('/academics/{tenant}/update-plan/{plan}', [AcademicsController::class, 'updatePlan'])->name('superadmin.academics.update-plan');
         Route::delete('/academics/{tenant}', [AcademicsController::class, 'destroy'])->name('superadmin.academics.destroy');
+
+        Route::get('/withdrawals', [\App\Http\Controllers\SuperAdmin\WithdrawalController::class, 'index'])->name('superadmin.withdrawals.index');
+        Route::patch('/withdrawals/{transaction}/approve', [\App\Http\Controllers\SuperAdmin\WithdrawalController::class, 'approve'])->name('superadmin.withdrawals.approve');
     });
 };
 

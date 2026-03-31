@@ -8,6 +8,9 @@
     <a href="{{ route('superadmin.academics.index') }}" class="{{ request()->routeIs('superadmin.academics*') ? 'active' : '' }} m-2">
         <i class="bi bi-people me-2"></i> All Academics
     </a>
+    <a href="{{ route('superadmin.withdrawals.index') }}" class="{{ request()->routeIs('superadmin.withdrawals*') ? 'active' : '' }} m-2">
+        <i class="bi bi-cash-stack me-2"></i> Withdrawals
+    </a>
     <hr class="border-white opacity-25 mx-3">
     <form method="POST" action="{{ route('superadmin.logout') }}">
         @csrf
