@@ -47,8 +47,8 @@ $tenantRoutes = function () {
     // ----- Marketplace & Checkout -----
     Route::get('/marketplace', [MarketplaceController::class, 'index'])->name('tenant.marketplace.index');
     Route::get('/marketplace/{product}', [MarketplaceController::class, 'show'])->name('tenant.marketplace.show');
-    Route::get('/checkout/{product}', [CheckoutController::class, 'checkout'])->name('tenant.checkout.index');
     Route::get('/checkout/verify', [CheckoutController::class, 'verify'])->name('tenant.checkout.verify');
+    Route::get('/checkout/{product}', [CheckoutController::class, 'checkout'])->name('tenant.checkout.index');
     Route::get('/checkout/{product}/success', [CheckoutController::class, 'success'])->name('tenant.checkout.success');
     Route::get('/checkout/{product}/download', [CheckoutController::class, 'download'])->name('tenant.checkout.download');
 
