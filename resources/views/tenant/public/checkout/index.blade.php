@@ -60,15 +60,16 @@
     function payWithPaystack(e) {
         e.preventDefault();
         
+        var customRef = 'PKG_' + Math.floor((Math.random() * 1000000000) + 1);
         let handler = PaystackPop.setup({
             key: '{{ env("PAYSTACK_PUBLIC_KEY") }}', // Put Paystack Public Key in env
             email: document.getElementById('email-address').value,
             amount: {{ $product->price * 100 }}, // Paystack takes amount in kobo
             currency: "NGN",
-            ref: ''+Math.floor((Math.random() * 1000000000) + 1), // Generate a random ref
+            reference: customRef, // Use reference instead of ref and provide the constant customRef
             callback: function(response) {
                 // Payment was successful, verify on backend
-                let reference = response.reference;
+                let reference = response.reference || response.trxref || response.trans || customRef;
                 let email = document.getElementById('email-address').value;
                 let verifyUrl = "{{ route('tenant.checkout.verify', ['tenant' => $tenant->subdomain]) }}?reference=" + reference + "&product_id={{ $product->id }}&email=" + encodeURIComponent(email);
                 window.location.href = verifyUrl;
