@@ -71,7 +71,9 @@
                 // Payment was successful, verify on backend
                 let reference = response.reference || response.trxref || response.trans || customRef;
                 let email = document.getElementById('email-address').value;
-                let verifyUrl = "{{ route('tenant.checkout.verify', ['tenant' => $tenant->subdomain]) }}?reference=" + reference + "&product_id={{ $product->id }}&email=" + encodeURIComponent(email);
+                let baseUrl = "{{ route('tenant.checkout.verify', ['tenant' => $tenant->subdomain]) }}";
+                let separator = baseUrl.indexOf('?') !== -1 ? '&' : '?';
+                let verifyUrl = baseUrl + separator + "reference=" + encodeURIComponent(reference) + "&product_id={{ $product->id }}&email=" + encodeURIComponent(email);
                 window.location.href = verifyUrl;
             },
             onClose: function() {
