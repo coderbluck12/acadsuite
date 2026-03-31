@@ -12,6 +12,7 @@
             height: 100vh; background: #3F51B5; color: white;
             padding-top: 20px; position: fixed; width: 220px;
             left: 0; top: 0; transition: left 0.3s ease; z-index: 1050;
+            overflow-y: auto;
         }
         .sidebar a { display: block; color: white; text-decoration: none; padding: 11px 20px; margin-bottom: 4px; border-radius: 5px; transition: background 0.25s; font-size: 0.9rem; }
         .sidebar a:hover, .sidebar a.active { background: rgba(255,255,255,0.2); font-weight: 600; }

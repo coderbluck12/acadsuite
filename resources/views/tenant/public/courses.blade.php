@@ -58,18 +58,7 @@
         </p>
     </section>
 
-    <!-- Filter Dropdown -->
-    <section class="container mb-4">
-        <div class="row">
-            <div class="col-md-4 ">
-                <select class="form-select" id="accessFilter">
-                    <option value="">Filter by Access</option>
-                    <option value="public">Public</option>
-                    <option value="private">Private</option>
-                </select>
-            </div>
-        </div>
-    </section>
+    <!-- Filter Dropdown removed for public courses -->
 
     <!-- Courses Section -->
     <section class="container mt-4 mb-5">

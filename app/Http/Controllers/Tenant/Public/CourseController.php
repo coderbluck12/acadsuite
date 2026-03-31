@@ -12,6 +12,9 @@ class CourseController extends Controller
     {
         $courses = Course::where('is_published', true)
                          ->where('visibility', 'general')
+                         ->where(function ($query) {
+                             $query->where('access_type', 'public')->orWhereNull('access_type');
+                         })
                          ->latest()
                          ->paginate(12);
         return view('tenant.public.courses', compact('courses'));
