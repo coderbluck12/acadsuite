@@ -1,4 +1,8 @@
-@extends('tenant.admin.layouts.app')
+@extends('layouts.admin')
+
+@section('sidebar-nav')
+    @include('tenant.admin.partials.sidebar')
+@endsection
 
 @section('title', 'Marketplace Purchases')
 
