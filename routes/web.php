@@ -65,6 +65,7 @@ $tenantRoutes = function () {
     Route::get('/forgot-password', [\App\Http\Controllers\Tenant\Auth\TenantPasswordResetController::class, 'showLinkRequestForm'])->name('tenant.password.request');
     Route::post('/forgot-password', [\App\Http\Controllers\Tenant\Auth\TenantPasswordResetController::class, 'sendResetLinkEmail'])->name('tenant.password.email');
     Route::get('/reset-password/{token}', [\App\Http\Controllers\Tenant\Auth\TenantPasswordResetController::class, 'showResetForm'])->name('tenant.password.reset');
+    Route::get('/reset-password/{token}', [\App\Http\Controllers\Tenant\Auth\TenantPasswordResetController::class, 'showResetForm'])->name('password.reset');
     Route::post('/reset-password', [\App\Http\Controllers\Tenant\Auth\TenantPasswordResetController::class, 'reset'])->name('tenant.password.update');
 
     // ----- Admin Panel -----
