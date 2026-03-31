@@ -24,7 +24,7 @@ class MarketplaceController extends Controller
         $tenant = app('currentTenant');
         
         // Ensure product belongs to current tenant
-        if ($product->tenant_id !== $tenant->id || !$product->is_active) {
+        if ($product->tenant_id != $tenant->id || !$product->is_active) {
             abort(404);
         }
 

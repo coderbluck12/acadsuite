@@ -16,7 +16,7 @@ class CheckoutController extends Controller
     {
         $tenant = app('currentTenant');
         
-        if ($product->tenant_id !== $tenant->id || !$product->is_active) {
+        if ($product->tenant_id != $tenant->id || !$product->is_active) {
             abort(404);
         }
 
@@ -93,7 +93,7 @@ class CheckoutController extends Controller
         
         // Basic security check: ideally we verify the user actually purchased this recently
         // For now, if it's a soft copy, we'll allow download from the success page link.
-        if ($product->tenant_id !== $tenant->id || $product->format !== 'soft_copy' || !$product->file_path) {
+        if ($product->tenant_id != $tenant->id || $product->format !== 'soft_copy' || !$product->file_path) {
             abort(404);
         }
 
