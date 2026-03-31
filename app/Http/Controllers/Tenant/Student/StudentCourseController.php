@@ -15,8 +15,14 @@ class StudentCourseController extends Controller
     {
         $user = Auth::guard('web')->user();
         
-        // Fetch published courses and eager load the user's enrollment
+        // Fetch published courses that are either general OR the user is already enrolled in.
         $courses = Course::where('is_published', true)
+                         ->where(function($q) use ($user) {
+                             $q->where('visibility', 'general')
+                               ->orWhereHas('students', function($sq) use ($user) {
+                                   $sq->where('user_id', $user->id);
+                               });
+                         })
                          ->with(['students' => function ($query) use ($user) {
                              $query->where('user_id', $user->id);
                          }])
@@ -24,6 +30,28 @@ class StudentCourseController extends Controller
                          ->paginate(12);
 
         return view('tenant.student.courses', compact('courses', 'user'));
+    }
+
+    public function joinPrivate(Request $request): RedirectResponse
+    {
+        $request->validate(['access_code' => 'required|string']);
+        $user = Auth::guard('web')->user();
+        
+        $course = Course::where('access_code', $request->access_code)
+                        ->where('visibility', 'private')
+                        ->where('is_published', true)
+                        ->first();
+                        
+        if (!$course) {
+            return redirect()->back()->with('error', 'Invalid access code or course not available.');
+        }
+
+        if (!$course->students()->where('user_id', $user->id)->exists()) {
+            $course->students()->attach($user->id, ['enrolled_at' => now()]);
+            return redirect()->back()->with('success', 'You have successfully enrolled in the private course!');
+        }
+
+        return redirect()->back()->with('info', 'You are already enrolled in this course.');
     }
 
     public function enroll(Course $course): RedirectResponse

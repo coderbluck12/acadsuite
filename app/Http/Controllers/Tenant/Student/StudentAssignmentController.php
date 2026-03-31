@@ -20,6 +20,7 @@ class StudentAssignmentController extends Controller
         $enrolledCourseIds = $user->courses()->pluck('courses.id');
         
         $assignments = Assignment::whereIn('course_id', $enrolledCourseIds)
+            ->where('is_published', true)
             ->with(['submissions' => function ($q) use ($user) {
                 $q->where('user_id', $user->id);
             }])

@@ -13,7 +13,7 @@ class Assignment extends Model
 
     protected $fillable = [
         'tenant_id', 'course_id', 'title', 'description',
-        'due_date', 'file_path',
+        'due_date', 'file_path', 'is_published',
     ];
 
     protected $casts = ['due_date' => 'datetime'];

@@ -24,6 +24,10 @@ class AdminProductController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        if ($request->has('price')) {
+            $request->merge(['price' => str_replace(',', '', $request->price)]);
+        }
+
         $validated = $request->validate([
             'title'       => 'required|string|max:255',
             'description' => 'required|string',
@@ -53,6 +57,10 @@ class AdminProductController extends Controller
 
     public function update(Request $request, Product $product): RedirectResponse
     {
+        if ($request->has('price')) {
+            $request->merge(['price' => str_replace(',', '', $request->price)]);
+        }
+
         $validated = $request->validate([
             'title'       => 'required|string|max:255',
             'description' => 'required|string',

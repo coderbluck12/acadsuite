@@ -39,13 +39,25 @@ class AdminAssignmentController extends Controller
             'course_id'   => 'nullable|exists:courses,id',
             'due_date'    => 'nullable|date',
             'file'        => 'nullable|file|max:10240',
+            'is_published'=> 'boolean',
         ]);
         if ($request->hasFile('file')) {
             $validated['file_path'] = $request->file('file')->store('assignments', 'public');
         }
         unset($validated['file']);
-        Assignment::create($validated);
-        return redirect()->route('tenant.admin.assignments.index', ['tenant' => app('currentTenant')->subdomain])->with('success', 'Assignment created.');
+        $assignment = Assignment::create($validated);
+
+        if ($assignment->course_id) {
+            $course = Course::with('students')->find($assignment->course_id);
+            if ($course) {
+                foreach ($course->students as $student) {
+                    \Illuminate\Support\Facades\Mail::to($student->email)
+                        ->queue(new \App\Mail\NewAssignmentMail($assignment, $student, app('currentTenant')));
+                }
+            }
+        }
+
+        return redirect()->route('tenant.admin.assignments.index', ['tenant' => app('currentTenant')->subdomain])->with('success', 'Assignment created and students notified.');
     }
 
     public function edit(Assignment $assignment): View
@@ -62,6 +74,7 @@ class AdminAssignmentController extends Controller
             'course_id'   => 'nullable|exists:courses,id',
             'due_date'    => 'nullable|date',
             'file'        => 'nullable|file|max:10240',
+            'is_published'=> 'boolean',
         ]);
         if ($request->hasFile('file')) {
             if ($assignment->file_path) Storage::disk('public')->delete($assignment->file_path);

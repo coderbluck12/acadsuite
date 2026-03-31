@@ -32,9 +32,11 @@
                         <td>{{ $products->firstItem() + $i }}</td>
                         <td>
                             @if($product->image_path)
-                                <img src="{{ asset('storage/' . $product->image_path) }}" height="40" class="rounded border">
+                                <img src="{{ asset('storage/' . $product->image_path) }}" height="40" width="40" style="object-fit: cover;" class="rounded border">
                             @else
-                                <span class="text-muted"><i class="bi bi-image"></i></span>
+                                <div class="bg-secondary rounded border d-inline-flex align-items-center justify-content-center text-white" style="height: 40px; width: 40px;" title="No Cover">
+                                    <i class="bi bi-book fs-6"></i>
+                                </div>
                             @endif
                         </td>
                         <td>{{ Str::limit($product->title, 50) }}</td>

@@ -33,6 +33,8 @@ class AdminCourseController extends Controller
             'level'        => 'nullable|string|max:50',
             'cover_image'  => 'nullable|image|max:2048',
             'is_published' => 'boolean',
+            'visibility'   => 'required|in:general,private,hidden',
+            'access_code'  => 'nullable|string|max:255',
         ]);
         if ($request->hasFile('cover_image')) {
             $validated['cover_image'] = $request->file('cover_image')->store('courses', 'public');
@@ -52,6 +54,8 @@ class AdminCourseController extends Controller
             'level'        => 'nullable|string|max:50',
             'cover_image'  => 'nullable|image|max:2048',
             'is_published' => 'boolean',
+            'visibility'   => 'required|in:general,private,hidden',
+            'access_code'  => 'nullable|string|max:255',
         ]);
         if ($request->hasFile('cover_image')) {
             if ($course->cover_image) Storage::disk('public')->delete($course->cover_image);

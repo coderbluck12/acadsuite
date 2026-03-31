@@ -32,6 +32,14 @@
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">Dashboard Background Image</label>
                     <input type="file" name="dashboard_bg_image" class="form-control form-control-sm" accept="image/*">
+                    @if($tenant->dashboard_bg_image)
+                    <div class="form-check mt-2">
+                        <input class="form-check-input" type="checkbox" name="remove_dashboard_bg" value="1" id="removeDashboardBg">
+                        <label class="form-check-label text-danger small" for="removeDashboardBg">
+                            Remove current background
+                        </label>
+                    </div>
+                    @endif
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">Home Page Background Image</label>

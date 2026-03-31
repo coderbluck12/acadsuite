@@ -23,7 +23,7 @@
         <div class="table-responsive">
             <table id="assignmentTable" class="table table-bordered align-middle">
                 <thead class="table-dark">
-                    <tr><th>#</th><th>Title</th><th>Course</th><th>Due Date</th><th>Submissions</th><th>Actions</th></tr>
+                    <tr><th>#</th><th>Title</th><th>Course</th><th>Due Date</th><th>Status</th><th>Submissions</th><th>Actions</th></tr>
                 </thead>
                 <tbody>
                     @foreach($assignments as $i => $assignment)
@@ -32,6 +32,7 @@
                         <td>{{ $assignment->title }}</td>
                         <td>{{ $assignment->course?->title ?? '—' }}</td>
                         <td>{{ $assignment->due_date?->format('d M Y') ?? '—' }}</td>
+                        <td><span class="badge {{ $assignment->is_published ? 'bg-success' : 'bg-secondary' }}">{{ $assignment->is_published ? 'Published' : 'Draft' }}</span></td>
                         <td><span class="badge bg-info text-dark">{{ $assignment->submissions->count() }}</span></td>
                         <td>
                             <a href="{{ route('tenant.admin.assignments.show', ['tenant' => $tenant->subdomain, 'assignment' => $assignment]) }}" class="btn btn-sm btn-outline-success me-1" title="View Submissions"><i class="bi bi-eye"></i></a>
@@ -86,6 +87,13 @@
                             <label class="form-label fw-semibold">Attach File (Optional)</label>
                             <input type="file" name="file" class="form-control">
                         </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Visibility</label>
+                            <select name="is_published" class="form-select w-100" required>
+                                <option value="1" {{ $assignment->is_published ? 'selected' : '' }}>Published (Visible to Students)</option>
+                                <option value="0" {{ !$assignment->is_published ? 'selected' : '' }}>Draft</option>
+                            </select>
+                        </div>
                         <button type="submit" class="btn btn-primary w-100"><i class="bi bi-save"></i> Save Changes</button>
                     </form>
                 </div>
@@ -130,6 +138,13 @@
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Attach File (Optional)</label>
                         <input type="file" name="file" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="visibility" class="form-label fw-semibold">Visibility</label>
+                        <select name="is_published" id="visibility" class="form-select w-100" required>
+                            <option value="1">Publish Immediately</option>
+                            <option value="0">Save as Draft</option>
+                        </select>
                     </div>
                     <button type="submit" class="btn btn-primary w-100"><i class="bi bi-upload"></i> Create Assignment</button>
                 </form>

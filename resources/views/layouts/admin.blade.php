@@ -53,8 +53,16 @@
                 @endif
             </a>
             <div class="ms-auto d-flex align-items-center gap-3">
-                <small class="text-white d-none d-md-inline">{{ isset($tenant) ? $tenant->owner_name : 'Super Admin' }}</small>
-                @if(isset($tenant) && $tenant->avatar)
+                <small class="text-white d-none d-md-inline">
+                    @if(auth()->check() && auth()->user()->role === 'student')
+                        {{ auth()->user()->name }}
+                    @else
+                        {{ isset($tenant) ? $tenant->owner_name : 'Super Admin' }}
+                    @endif
+                </small>
+                @if(auth()->check() && auth()->user()->role === 'student' && auth()->user()->avatar)
+                    <img src="{{ asset('storage/' . auth()->user()->avatar) }}" alt="Profile" class="profile-img">
+                @elseif(isset($tenant) && $tenant->avatar)
                     <img src="{{ asset('storage/' . $tenant->avatar) }}" alt="Profile" class="profile-img">
                 @else
                     <img src="{{ asset('assets/logo.png') }}" alt="Profile" class="profile-img">

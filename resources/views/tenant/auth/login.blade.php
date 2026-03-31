@@ -95,6 +95,9 @@
                         <label class="form-label">Password</label>
                         <input type="password" name="password" class="form-control" required>
                     </div>
+                    <div class="text-end mb-3">
+                        <a href="{{ route('tenant.password.request', ['tenant' => $tenant->subdomain ?? '']) }}" class="text-decoration-none fw-semibold">Forgot your password?</a>
+                    </div>
                     <div class="form-check mb-3">
                         <input type="checkbox" name="remember" class="form-check-input" id="rememberMe">
                         <label class="form-check-label" for="rememberMe">Remember me</label>

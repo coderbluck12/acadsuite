@@ -12,7 +12,7 @@ class Course extends Model
 
     protected $fillable = [
         'tenant_id', 'title', 'description', 'duration',
-        'level', 'cover_image', 'is_published',
+        'level', 'cover_image', 'is_published', 'visibility', 'access_code',
     ];
 
     protected $casts = ['is_published' => 'boolean'];

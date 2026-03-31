@@ -32,7 +32,20 @@
 
 @section('content')
 <div class="container-fluid mt-2">
-    <h4 class="mb-4">Available Courses</h4>
+    <div class="row align-items-center mb-4">
+        <div class="col-md-6">
+            <h4 class="mb-0">Available Courses</h4>
+        </div>
+        <div class="col-md-6 text-md-end mt-3 mt-md-0">
+            <form action="{{ route('tenant.student.courses.join-private', ['tenant' => $tenant->subdomain]) }}" method="POST" class="d-flex justify-content-md-end">
+                @csrf
+                <div class="input-group" style="max-width: 350px;">
+                    <input type="text" name="access_code" class="form-control" placeholder="Got a private access code?" required>
+                    <button class="btn btn-outline-primary" type="submit">Join</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <div class="row g-4">
         @forelse($courses as $course)

@@ -10,7 +10,10 @@ class CourseController extends Controller
 {
     public function index(): View
     {
-        $courses = Course::where('is_published', true)->latest()->paginate(12);
+        $courses = Course::where('is_published', true)
+                         ->where('visibility', 'general')
+                         ->latest()
+                         ->paginate(12);
         return view('tenant.public.courses', compact('courses'));
     }
 

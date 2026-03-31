@@ -23,7 +23,7 @@
                 </div>
                 <div class="col-md-4">
                     <label class="form-label fw-semibold">Price (₦) *</label>
-                    <input type="number" name="price" step="0.01" min="0" class="form-control" value="{{ old('price', $product->price ?? '0.00') }}" required>
+                    <input type="number" name="price" step="any" min="0" class="form-control" value="{{ old('price', $product->price ?? '0') }}" required>
                 </div>
             </div>
 

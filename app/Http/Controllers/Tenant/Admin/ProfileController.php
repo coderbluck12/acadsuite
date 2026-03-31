@@ -32,6 +32,7 @@ class ProfileController extends Controller
             'logo'          => 'nullable|image|mimes:jpg,jpeg,png,svg|max:2048',
             'dashboard_bg_image' => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
             'home_bg_image' => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
+            'remove_dashboard_bg' => 'nullable|boolean',
             'custom_domain' => 'nullable|string|max:255|unique:tenants,custom_domain,' . $tenant->id,
         ]);
 
@@ -42,6 +43,13 @@ class ProfileController extends Controller
                 }
                 $validated[$field] = $request->file($field)->store('tenant_images', 'public');
             }
+        }
+
+        if ($request->boolean('remove_dashboard_bg')) {
+            if ($tenant->dashboard_bg_image) {
+                Storage::disk('public')->delete($tenant->dashboard_bg_image);
+            }
+            $validated['dashboard_bg_image'] = null;
         }
 
         $tenant->update($validated);

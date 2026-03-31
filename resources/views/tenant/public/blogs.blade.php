@@ -9,8 +9,8 @@
             <nav class="navbar navbar-expand-md border border-white rounded-5 glass-navbar px-4 py-2 w-100" style="background-color: rgba(255, 255, 255, 0.2); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">
                 <!-- Logo -->
                 <a class="navbar-brand" href="{{ route('tenant.home', ['tenant' => $tenant->subdomain]) }}">
-                    @if($tenant->avatar)
-                        <img src="{{ asset('storage/' . $tenant->avatar) }}" alt="Logo" style="width: 100px;">
+                    @if($tenant->logo)
+                        <img src="{{ asset('storage/' . $tenant->logo) }}" alt="Logo" style="width: 100px;">
                     @else
                         <img src="{{ asset('assets/logo.png') }}" alt="Logo" style="width: 100px;">
                     @endif

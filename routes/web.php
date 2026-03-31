@@ -59,6 +59,12 @@ $tenantRoutes = function () {
     Route::post('/register', [TenantAuthController::class, 'register'])->name('tenant.register.post');
     Route::post('/logout', [TenantAuthController::class, 'logout'])->name('tenant.logout');
 
+    // Password Reset
+    Route::get('/forgot-password', [\App\Http\Controllers\Tenant\Auth\TenantPasswordResetController::class, 'showLinkRequestForm'])->name('tenant.password.request');
+    Route::post('/forgot-password', [\App\Http\Controllers\Tenant\Auth\TenantPasswordResetController::class, 'sendResetLinkEmail'])->name('tenant.password.email');
+    Route::get('/reset-password/{token}', [\App\Http\Controllers\Tenant\Auth\TenantPasswordResetController::class, 'showResetForm'])->name('tenant.password.reset');
+    Route::post('/reset-password', [\App\Http\Controllers\Tenant\Auth\TenantPasswordResetController::class, 'reset'])->name('tenant.password.update');
+
     // ----- Admin Panel -----
     Route::prefix('admin')->middleware('tenant_admin')->group(function () {
         Route::get('/profile', [ProfileController::class, 'show'])->name('tenant.admin.profile');
@@ -91,6 +97,7 @@ $tenantRoutes = function () {
         Route::post('/assignments/{assignment}/submit', [StudentAssignmentController::class, 'submit'])->name('tenant.student.assignments.submit');
         
         Route::get('/courses', [\App\Http\Controllers\Tenant\Student\StudentCourseController::class, 'index'])->name('tenant.student.courses');
+        Route::post('/courses/join-private', [\App\Http\Controllers\Tenant\Student\StudentCourseController::class, 'joinPrivate'])->name('tenant.student.courses.join-private');
         Route::post('/courses/{course}/enroll', [\App\Http\Controllers\Tenant\Student\StudentCourseController::class, 'enroll'])->name('tenant.student.courses.enroll');
     });
 };

@@ -82,11 +82,23 @@
                             <input type="file" name="cover_image" class="form-control" accept="image/*">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label fw-semibold">Visibility</label>
+                            <label class="form-label fw-semibold">Publish Status</label>
                             <select name="is_published" class="form-select w-100" required>
-                                <option value="1" {{ $course->is_published ? 'selected' : '' }}>Published</option>
+                                <option value="1" {{ $course->is_published ? 'selected' : '' }}>Published (Active)</option>
                                 <option value="0" {{ !$course->is_published ? 'selected' : '' }}>Draft</option>
                             </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Course Visibility</label>
+                            <select name="visibility" class="form-select w-100" required>
+                                <option value="general" {{ $course->visibility == 'general' ? 'selected' : '' }}>General (Public)</option>
+                                <option value="private" {{ $course->visibility == 'private' ? 'selected' : '' }}>Private (Requires Code)</option>
+                                <option value="hidden" {{ $course->visibility == 'hidden' ? 'selected' : '' }}>Hidden (Admin Only)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Access Code (If Private)</label>
+                            <input type="text" name="access_code" class="form-control" value="{{ $course->access_code }}">
                         </div>
                         <button type="submit" class="btn btn-primary w-100"><i class="bi bi-save"></i> Save Changes</button>
                     </form>
@@ -131,11 +143,23 @@
                         <input type="file" name="cover_image" class="form-control" id="courseMaterials" accept="image/*">
                     </div>
                     <div class="mb-3">
-                        <label for="visibility" class="form-label fw-semibold">Visibility</label>
-                        <select name="is_published" id="visibility" class="form-select w-100" required>
-                            <option value="1">Published</option>
+                        <label for="is_published" class="form-label fw-semibold">Publish Status</label>
+                        <select name="is_published" id="is_published" class="form-select w-100" required>
+                            <option value="1">Published (Active)</option>
                             <option value="0">Draft</option>
                         </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Course Visibility</label>
+                        <select name="visibility" class="form-select w-100" required>
+                            <option value="general">General (Public)</option>
+                            <option value="private">Private (Requires Code)</option>
+                            <option value="hidden">Hidden (Admin Only)</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Access Code (If Private)</label>
+                        <input type="text" name="access_code" class="form-control" placeholder="Optional">
                     </div>
                     <button type="submit" class="btn btn-primary w-100"><i class="bi bi-upload"></i> Create Course</button>
                 </form>

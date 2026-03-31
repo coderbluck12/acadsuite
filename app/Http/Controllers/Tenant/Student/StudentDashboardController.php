@@ -21,6 +21,7 @@ class StudentDashboardController extends Controller
 
         // Only show assignments for those enrolled courses
         $assignments = Assignment::whereIn('course_id', $enrolledCourseIds)
+                                 ->where('is_published', true)
                                  ->latest()
                                  ->take(5)
                                  ->get();
