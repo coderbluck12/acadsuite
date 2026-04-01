@@ -38,7 +38,15 @@ class ConsultationBookingController extends Controller
         $dayConfig = $availability[$dayOfWeek] ?? null;
 
         if (!$dayConfig || !isset($dayConfig['enabled']) || !$dayConfig['enabled']) {
-            return response()->json(['slots' => []]);
+            return response()->json([
+                'slots' => [],
+                'debug' => [
+                    'dayOfWeek' => $dayOfWeek,
+                    'avail_type' => gettype($availability),
+                    'availability' => $availability,
+                    'dayConfig' => $dayConfig
+                ]
+            ]);
         }
 
         $start = strtotime($dayConfig['start']);

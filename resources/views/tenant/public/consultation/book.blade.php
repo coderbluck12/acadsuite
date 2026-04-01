@@ -117,6 +117,9 @@
                 } else {
                     timeSelect.innerHTML = '<option value="">No availability on this date</option>';
                     timeSelect.disabled = true;
+                    if (data.debug) {
+                        console.log("Slot fetch debug info:", data.debug);
+                    }
                 }
             })
             .catch(err => {
