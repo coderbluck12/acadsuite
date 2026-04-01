@@ -16,12 +16,15 @@ class StudentAssignmentController extends Controller
     {
         $user = Auth::guard('web')->user();
         
-        // Only show assignments for courses the student is enrolled in
-        $enrolledCourseIds = $user->courses()->pluck('courses.id');
+        // Show assignments for enrolled courses OR general assignments
+        $enrolledCourseIds = $user->courses()->pluck('courses.id')->toArray();
         
-        $assignments = Assignment::whereIn('course_id', $enrolledCourseIds)
-            ->where('is_published', true)
-            ->with(['submissions' => function ($q) use ($user) {
+        $assignments = Assignment::where('is_published', true)
+            ->where(function($query) use ($enrolledCourseIds) {
+                $query->where('is_general', true)
+                      ->orWhereIn('course_id', $enrolledCourseIds);
+            })
+            ->with(['course', 'submissions' => function ($q) use ($user) {
                 $q->where('user_id', $user->id);
             }])
             ->latest()

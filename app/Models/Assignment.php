@@ -13,10 +13,13 @@ class Assignment extends Model
 
     protected $fillable = [
         'tenant_id', 'course_id', 'title', 'description',
-        'due_date', 'file_path', 'is_published',
+        'due_date', 'file_path', 'is_published', 'is_general',
     ];
 
-    protected $casts = ['due_date' => 'datetime'];
+    protected $casts = [
+        'due_date' => 'datetime',
+        'is_general' => 'boolean'
+    ];
 
     public function course(): BelongsTo
     {

@@ -30,6 +30,9 @@
     <a href="/admin/purchases" class="{{ request()->routeIs('tenant.admin.purchases*') ? 'active' : '' }} m-2">
         <i class="bi bi-cart-check me-2"></i> Purchases
     </a>
+    <a href="/admin/consultation" class="{{ request()->routeIs('tenant.admin.consultation*') ? 'active' : '' }} m-2">
+        <i class="bi bi-calendar2-check me-2"></i> Consultations
+    </a>
     <a href="/admin/wallet" class="{{ request()->routeIs('tenant.admin.wallet*') ? 'active' : '' }} m-2">
         <i class="bi bi-wallet2 me-2"></i> Wallet
     </a>

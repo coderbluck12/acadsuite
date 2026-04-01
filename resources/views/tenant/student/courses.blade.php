@@ -41,7 +41,7 @@
                 @csrf
                 <div class="input-group" style="max-width: 350px;">
                     <input type="text" name="access_code" class="form-control" placeholder="Got a private access code?" required>
-                    <button class="btn btn-outline-primary" type="submit">Join</button>
+                    <button class="btn btn-outline-primary" type="submit">Search Course</button>
                 </div>
             </form>
         </div>
@@ -69,12 +69,9 @@
                                     <i class="bi bi-check-circle me-1"></i> Enrolled
                                 </button>
                             @else
-                                <form action="{{ route('tenant.student.courses.enroll', ['tenant' => $tenant->subdomain, 'course' => $course->id]) }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="btn btn-primary w-100">
-                                        <i class="bi bi-box-arrow-in-right me-1"></i> Enroll Now
-                                    </button>
-                                </form>
+                                <a href="{{ route('tenant.student.courses.show', ['tenant' => $tenant->subdomain, 'course' => $course->id]) }}" class="btn btn-primary w-100">
+                                    <i class="bi bi-eye me-1"></i> View Details
+                                </a>
                             @endif
                         </div>
                     </div>

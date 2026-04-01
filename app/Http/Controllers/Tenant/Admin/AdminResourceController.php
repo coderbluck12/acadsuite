@@ -14,10 +14,15 @@ class AdminResourceController extends Controller
     public function index(): View
     {
         $resources = Resource::latest()->paginate(15);
-        return view('tenant.admin.resources', compact('resources'));
+        $courses = \App\Models\Course::where('is_published', true)->get();
+        return view('tenant.admin.resources', compact('resources', 'courses'));
     }
 
-    public function create(): View { return view('tenant.admin.resources-form'); }
+    public function create(): View 
+    { 
+        $courses = \App\Models\Course::where('is_published', true)->get();
+        return view('tenant.admin.resources-form', compact('courses')); 
+    }
 
     public function store(Request $request): RedirectResponse
     {
@@ -29,11 +34,13 @@ class AdminResourceController extends Controller
         $validated = $request->validate([
             'title'        => 'required|string|max:255',
             'description'  => 'nullable|string',
+            'course_id'    => 'nullable|exists:courses,id',
             'file'         => 'nullable|file|max:10240',
             'file_type'    => 'nullable|string|max:50',
             'external_url' => 'nullable|url',
             'is_published' => 'boolean',
         ]);
+        $validated['is_general'] = $request->boolean('is_general');
         if ($request->hasFile('file')) {
             $validated['file_path'] = $request->file('file')->store('resources', 'public');
             $validated['file_type'] = $request->file('file')->getClientOriginalExtension();
@@ -43,17 +50,23 @@ class AdminResourceController extends Controller
         return redirect()->route('tenant.admin.resources.index', ['tenant' => app('currentTenant')->subdomain])->with('success', 'Resource added.');
     }
 
-    public function edit(Resource $resource): View { return view('tenant.admin.resources-form', compact('resource')); }
+    public function edit(Resource $resource): View 
+    { 
+        $courses = \App\Models\Course::where('is_published', true)->get();
+        return view('tenant.admin.resources-form', compact('resource', 'courses')); 
+    }
 
     public function update(Request $request, Resource $resource): RedirectResponse
     {
         $validated = $request->validate([
             'title'        => 'required|string|max:255',
             'description'  => 'nullable|string',
+            'course_id'    => 'nullable|exists:courses,id',
             'file'         => 'nullable|file|max:10240',
             'external_url' => 'nullable|url',
             'is_published' => 'boolean',
         ]);
+        $validated['is_general'] = $request->boolean('is_general');
         if ($request->hasFile('file')) {
             if ($resource->file_path) Storage::disk('public')->delete($resource->file_path);
             $validated['file_path'] = $request->file('file')->store('resources', 'public');

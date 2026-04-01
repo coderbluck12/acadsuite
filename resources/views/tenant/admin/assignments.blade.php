@@ -87,6 +87,10 @@
                             <label class="form-label fw-semibold">Attach File (Optional)</label>
                             <input type="file" name="file" class="form-control">
                         </div>
+                        <div class="mb-3 form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" name="is_general" value="1" {{ $assignment->is_general ? 'checked' : '' }}>
+                            <label class="form-check-label fw-semibold">General Assignment (Visible to all students)</label>
+                        </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Visibility</label>
                             <select name="is_published" class="form-select w-100" required>
@@ -138,6 +142,10 @@
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Attach File (Optional)</label>
                         <input type="file" name="file" class="form-control">
+                    </div>
+                    <div class="mb-3 form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" name="is_general" value="1">
+                        <label class="form-check-label fw-semibold">General Assignment (Visible to all students)</label>
                     </div>
                     <div class="mb-3">
                         <label for="visibility" class="form-label fw-semibold">Visibility</label>

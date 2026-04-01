@@ -68,8 +68,8 @@
                     </a>
                 </div>
                 <div class="mb-4 text-start">
-                    @if($tenant->avatar)
-                        <img src="{{ asset('storage/' . $tenant->avatar) }}" alt="Logo" width="100">
+                    @if($tenant->logo)
+                        <img src="{{ asset('storage/' . $tenant->logo) }}" alt="Logo" style="max-height: 60px; max-width: 120px; object-fit: contain;">
                     @else
                         <img src="{{ asset('assets/logo.png') }}" alt="Logo" width="100">
                     @endif

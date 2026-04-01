@@ -202,6 +202,16 @@
                         ORCID
                     </a>
                     @endif
+                    
+                    @php
+                        $consultation = \App\Models\Consultation::where('tenant_id', $tenant->id)->where('is_active', true)->first();
+                    @endphp
+                    @if($consultation)
+                    <a href="{{ route('tenant.consultation.book', ['tenant' => $tenant->subdomain]) }}" class="btn btn-success text-white fw-bold shadow-sm rounded-pill px-4">
+                        <i class="bi bi-calendar-event me-2"></i> Book Consultation
+                    </a>
+                    @endif
+
                     <a href="#" class="btn btn-outline-primary rounded-pill px-4" data-bs-toggle="modal"
                         data-bs-target="#aboutModal">
                         Check Profile →

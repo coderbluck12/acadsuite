@@ -10,13 +10,7 @@
         
         <div class="row g-5">
             <div class="col-md-5">
-                @if($product->image_path)
-                    <img src="{{ asset('storage/' . $product->image_path) }}" class="img-fluid rounded shadow-sm w-100" alt="{{ $product->title }}">
-                @else
-                    <div class="bg-light rounded shadow-sm d-flex align-items-center justify-content-center text-secondary w-100" style="height: 400px;">
-                        <i class="bi bi-image" style="font-size: 6rem;"></i>
-                    </div>
-                @endif
+                <img src="{{ $product->image_path ? asset('storage/' . $product->image_path) : asset('assets/publications.jpg') }}" class="img-fluid rounded shadow-sm w-100" alt="{{ $product->title }}" style="max-height: 500px; object-fit: cover;">
             </div>
             
             <div class="col-md-7">

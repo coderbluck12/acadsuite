@@ -86,7 +86,7 @@
     </aside>
 
     {{-- Content --}}
-    <main class="content mt-5 pt-3" @if(isset($tenant) && $tenant->dashboard_bg_image) style="background-image: url('{{ asset('storage/' . $tenant->dashboard_bg_image) }}'); background-size: cover; background-attachment: fixed; background-position: center;" @endif>
+    <main class="content pt-5 mt-5 pb-5" @if(isset($tenant) && $tenant->dashboard_bg_image) style="background-image: url('{{ asset('storage/' . $tenant->dashboard_bg_image) }}'); background-size: cover; background-attachment: fixed; background-position: center;" @endif>
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}

@@ -72,6 +72,19 @@
                             <input type="file" name="file" class="form-control">
                         </div>
                         <div class="mb-3">
+                            <label class="form-label fw-semibold">Related Course</label>
+                            <select name="course_id" class="form-select">
+                                <option value="">-- No Course --</option>
+                                @foreach($courses as $course)
+                                    <option value="{{ $course->id }}" {{ $res->course_id == $course->id ? 'selected' : '' }}>{{ $course->title }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3 form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" name="is_general" value="1" {{ $res->is_general ? 'checked' : '' }}>
+                            <label class="form-check-label fw-semibold">General Resource (Visible to all students)</label>
+                        </div>
+                        <div class="mb-3">
                             <label class="form-label fw-semibold">Visibility</label>
                             <select name="is_published" class="form-select w-100" required>
                                 <option value="1" {{ $res->is_published ? 'selected' : '' }}>Published</option>
@@ -109,6 +122,19 @@
                     <div class="mb-3">
                         <label for="pubFile" class="form-label fw-semibold">Upload File</label>
                         <input type="file" name="file" class="form-control" id="pubFile" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Related Course</label>
+                        <select name="course_id" class="form-select">
+                            <option value="">-- No Course --</option>
+                            @foreach($courses as $course)
+                                <option value="{{ $course->id }}">{{ $course->title }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3 form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" name="is_general" value="1">
+                        <label class="form-check-label fw-semibold">General Resource (Visible to all students)</label>
                     </div>
                     <div class="mb-3">
                         <label for="visibility" class="form-label fw-semibold">Visibility</label>

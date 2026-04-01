@@ -46,12 +46,19 @@ class StudentCourseController extends Controller
             return redirect()->back()->with('error', 'Invalid access code or course not available.');
         }
 
-        if (!$course->students()->where('user_id', $user->id)->exists()) {
-            $course->students()->attach($user->id, ['enrolled_at' => now()]);
-            return redirect()->back()->with('success', 'You have successfully enrolled in the private course!');
-        }
+        return redirect()->route('tenant.student.courses.show', [
+            'tenant' => app('currentTenant')->subdomain,
+            'course' => $course->id
+        ])->with('success', 'Course found! Please review the details and click Enroll.');
+    }
 
-        return redirect()->back()->with('info', 'You are already enrolled in this course.');
+    public function show(Course $course)
+    {
+        $user = Auth::guard('web')->user();
+        $tenant = app('currentTenant');
+        $isEnrolled = $course->students()->where('user_id', $user->id)->exists();
+
+        return view('tenant.student.course-show', compact('course', 'user', 'isEnrolled', 'tenant'));
     }
 
     public function enroll(Course $course): RedirectResponse

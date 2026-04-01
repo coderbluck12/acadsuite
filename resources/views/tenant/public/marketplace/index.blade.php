@@ -82,13 +82,7 @@
                 @forelse($products as $product)
                 <div class="col-md-4 col-sm-6 product-card" data-title="{{ strtolower($product->title) }}">
                     <div class="card shadow-sm border-0 h-100">
-                        @if($product->image_path)
-                            <img src="{{ asset('storage/' . $product->image_path) }}" class="card-img-top" alt="{{ $product->title }}" style="height: 250px; object-fit: cover;">
-                        @else
-                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center text-secondary" style="height: 250px;">
-                                <i class="bi bi-image" style="font-size: 4rem;"></i>
-                            </div>
-                        @endif
+                        <img src="{{ $product->image_path ? asset('storage/' . $product->image_path) : asset('assets/publications.jpg') }}" class="card-img-top" alt="{{ $product->title }}" style="height: 250px; object-fit: cover;">
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title fw-semibold text-primary mb-2">{{ Str::limit($product->title, 50) }}</h5>
                             <div class="mb-3">

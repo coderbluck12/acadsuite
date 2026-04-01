@@ -40,17 +40,27 @@ class CheckoutController extends Controller
         $tenant = app('currentTenant');
         $product = Product::findOrFail($productId);
 
-        // Verify with Paystack
-        $secretKey = env('PAYSTACK_SECRET_KEY');
-        if (!$secretKey) {
+        // Verify with Paystack or Simulator
+        $paymentSuccessful = false;
+        
+        if ($request->has('simulate_success')) {
             $paymentSuccessful = true;
-            \Illuminate\Support\Facades\Log::info("Checkout Verify bypass (No Secret Key)");
+            \Illuminate\Support\Facades\Log::info("Simulated Checkout Success");
+        } elseif ($request->has('simulate_failure')) {
+            $paymentSuccessful = false;
+            \Illuminate\Support\Facades\Log::info("Simulated Checkout Failure");
         } else {
-            $response = Http::withToken($secretKey)
-                ->get("https://api.paystack.co/transaction/verify/{$reference}");
-                
-            $paymentSuccessful = $response->successful() && $response->json('data.status') === 'success';
-            \Illuminate\Support\Facades\Log::info("Paystack Verify API", ['status' => $paymentSuccessful, 'body' => $response->json()]);
+            $secretKey = env('PAYSTACK_SECRET_KEY');
+            if (!$secretKey) {
+                $paymentSuccessful = true;
+                \Illuminate\Support\Facades\Log::info("Checkout Verify bypass (No Secret Key)");
+            } else {
+                $response = Http::withToken($secretKey)
+                    ->get("https://api.paystack.co/transaction/verify/{$reference}");
+                    
+                $paymentSuccessful = $response->successful() && $response->json('data.status') === 'success';
+                \Illuminate\Support\Facades\Log::info("Paystack Verify API", ['status' => $paymentSuccessful, 'body' => $response->json()]);
+            }
         }
 
         if ($paymentSuccessful) {
@@ -78,19 +88,35 @@ class CheckoutController extends Controller
                 $exists = Transaction::where('reference', $reference)->exists();
                 
                 if (!$exists) {
+                    $feePercentage = \App\Models\PlatformSetting::get('platform_fee_percentage', 0);
+                    $feeAmount = $product->price * ($feePercentage / 100);
+                    $tenantEarnings = $product->price - $feeAmount;
+
                     // Credit Tenant's Wallet
-                    $tenant->increment('wallet_balance', $product->price);
+                    $tenant->increment('wallet_balance', $tenantEarnings);
 
                     // Record Transaction
                     Transaction::create([
                         'tenant_id' => $tenant->id,
                         'user_id' => auth()->id(),
                         'type' => 'credit',
-                        'amount' => $product->price,
+                        'amount' => $tenantEarnings,
                         'reference' => $reference,
                         'status' => 'completed',
-                        'description' => "Sale of product: {$product->title}",
+                        'description' => "Sale of product: {$product->title}" . ($feeAmount > 0 ? " (Platform Fee Deducted)" : ""),
                     ]);
+
+                    if ($feeAmount > 0) {
+                        Transaction::create([
+                            'tenant_id' => $tenant->id,
+                            'user_id' => auth()->id(),
+                            'type' => 'platform_fee',
+                            'amount' => $feeAmount,
+                            'reference' => $reference,
+                            'status' => 'completed',
+                            'description' => "Platform Fee for product: {$product->title}",
+                        ]);
+                    }
                 }
 
                 \Illuminate\Support\Facades\Log::info("Checkout Verify Success Database Operations Completed", ['purchase_id' => $purchase->id]);

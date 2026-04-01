@@ -31,13 +31,7 @@
                     <tr>
                         <td>{{ $products->firstItem() + $i }}</td>
                         <td>
-                            @if($product->image_path)
-                                <img src="{{ asset('storage/' . $product->image_path) }}" height="40" width="40" style="object-fit: cover;" class="rounded border">
-                            @else
-                                <div class="bg-secondary rounded border d-inline-flex align-items-center justify-content-center text-white" style="height: 40px; width: 40px;" title="No Cover">
-                                    <i class="bi bi-book fs-6"></i>
-                                </div>
-                            @endif
+                            <img src="{{ $product->image_path ? asset('storage/' . $product->image_path) : asset('assets/publications.jpg') }}" height="40" width="40" style="object-fit: cover;" class="rounded border">
                         </td>
                         <td>{{ Str::limit($product->title, 50) }}</td>
                         <td>₦{{ number_format($product->price, 2) }}</td>

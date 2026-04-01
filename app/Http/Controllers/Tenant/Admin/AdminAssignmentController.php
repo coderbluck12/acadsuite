@@ -41,6 +41,7 @@ class AdminAssignmentController extends Controller
             'file'        => 'nullable|file|max:10240',
             'is_published'=> 'boolean',
         ]);
+        $validated['is_general'] = $request->boolean('is_general');
         if ($request->hasFile('file')) {
             $validated['file_path'] = $request->file('file')->store('assignments', 'public');
         }
@@ -76,6 +77,7 @@ class AdminAssignmentController extends Controller
             'file'        => 'nullable|file|max:10240',
             'is_published'=> 'boolean',
         ]);
+        $validated['is_general'] = $request->boolean('is_general');
         if ($request->hasFile('file')) {
             if ($assignment->file_path) Storage::disk('public')->delete($assignment->file_path);
             $validated['file_path'] = $request->file('file')->store('assignments', 'public');

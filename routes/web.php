@@ -54,6 +54,11 @@ $tenantRoutes = function () {
     Route::get('/checkout-download/{product}', [CheckoutController::class, 'download'])->name('tenant.checkout.download');
     Route::get('/checkout-receipt/{purchase}', [CheckoutController::class, 'receipt'])->name('tenant.checkout.receipt');
 
+    // ----- Consultation -----
+    Route::get('/consultation/book', [\App\Http\Controllers\Tenant\Public\ConsultationBookingController::class, 'book'])->name('tenant.consultation.book');
+    Route::get('/consultation/verify', [\App\Http\Controllers\Tenant\Public\ConsultationBookingController::class, 'verify'])->name('tenant.consultation.verify');
+    Route::get('/consultation/success/{booking}', [\App\Http\Controllers\Tenant\Public\ConsultationBookingController::class, 'success'])->name('tenant.consultation.success');
+
     // ----- Auth -----
     Route::get('/login', [TenantAuthController::class, 'showLogin'])->name('tenant.login');
     Route::post('/login', [TenantAuthController::class, 'login'])->name('tenant.login.post');
@@ -88,6 +93,9 @@ $tenantRoutes = function () {
         Route::get('/wallet', [AdminWalletController::class, 'index'])->name('tenant.admin.wallet');
         Route::get('/purchases', [AdminPurchaseController::class, 'index'])->name('tenant.admin.purchases.index');
         Route::post('/wallet/withdraw', [AdminWalletController::class, 'withdraw'])->name('tenant.admin.wallet.withdraw');
+
+        Route::get('/consultation', [\App\Http\Controllers\Tenant\Admin\AdminConsultationController::class, 'edit'])->name('tenant.admin.consultation.edit');
+        Route::put('/consultation', [\App\Http\Controllers\Tenant\Admin\AdminConsultationController::class, 'update'])->name('tenant.admin.consultation.update');
         
         Route::get('/plans', [\App\Http\Controllers\Tenant\Admin\AdminPlanController::class, 'index'])->name('tenant.admin.plans');
     });
@@ -101,6 +109,7 @@ $tenantRoutes = function () {
         Route::post('/assignments/{assignment}/submit', [StudentAssignmentController::class, 'submit'])->name('tenant.student.assignments.submit');
         
         Route::get('/courses', [\App\Http\Controllers\Tenant\Student\StudentCourseController::class, 'index'])->name('tenant.student.courses');
+        Route::get('/courses/{course}', [\App\Http\Controllers\Tenant\Student\StudentCourseController::class, 'show'])->name('tenant.student.courses.show');
         Route::post('/courses/join-private', [\App\Http\Controllers\Tenant\Student\StudentCourseController::class, 'joinPrivate'])->name('tenant.student.courses.join-private');
         Route::post('/courses/{course}/enroll', [\App\Http\Controllers\Tenant\Student\StudentCourseController::class, 'enroll'])->name('tenant.student.courses.enroll');
     });
@@ -126,6 +135,9 @@ $superAdminRoutes = function () {
 
         Route::get('/withdrawals', [\App\Http\Controllers\SuperAdmin\WithdrawalController::class, 'index'])->name('superadmin.withdrawals.index');
         Route::patch('/withdrawals/{transaction}/approve', [\App\Http\Controllers\SuperAdmin\WithdrawalController::class, 'approve'])->name('superadmin.withdrawals.approve');
+        
+        Route::get('/settings', [\App\Http\Controllers\SuperAdmin\PlatformSettingController::class, 'index'])->name('superadmin.settings.index');
+        Route::put('/settings', [\App\Http\Controllers\SuperAdmin\PlatformSettingController::class, 'update'])->name('superadmin.settings.update');
     });
 };
 

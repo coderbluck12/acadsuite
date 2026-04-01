@@ -13,7 +13,20 @@ class ResourceController extends Controller
 {
     public function index(): View
     {
-        $resources = Resource::where('is_published', true)->latest()->paginate(12);
+        $user = auth()->guard('web')->user();
+        $query = Resource::where('is_published', true);
+        
+        if ($user) {
+            $enrolledCourseIds = $user->courses()->pluck('courses.id')->toArray();
+            $query->where(function($q) use ($enrolledCourseIds) {
+                $q->where('is_general', true)
+                  ->orWhereIn('course_id', $enrolledCourseIds);
+            });
+        } else {
+            $query->where('is_general', true);
+        }
+        
+        $resources = $query->latest()->paginate(12);
         return view('tenant.public.resources', compact('resources'));
     }
 

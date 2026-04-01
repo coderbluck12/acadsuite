@@ -46,13 +46,7 @@
                                 <tr>
                                     <td class="py-4">
                                         <div class="d-flex align-items-center">
-                                            @if($purchase->product->image_path)
-                                                <img src="{{ asset('storage/' . $purchase->product->image_path) }}" class="rounded me-3" width="40" height="40" style="object-fit: cover;">
-                                            @else
-                                                <div class="bg-light rounded me-3 d-flex align-items-center justify-content-center text-secondary" style="width: 40px; height: 40px;">
-                                                    <i class="bi bi-book"></i>
-                                                </div>
-                                            @endif
+                                            <img src="{{ $purchase->product->image_path ? asset('storage/' . $purchase->product->image_path) : asset('assets/publications.jpg') }}" class="rounded me-3" width="40" height="40" style="object-fit: cover;">
                                             <div>
                                                 <div class="fw-bold">{{ $purchase->product->title }}</div>
                                                 <div class="small text-muted">{{ $purchase->product->format === 'hard_copy' ? 'Hard Copy Book' : 'Digital Download' }}</div>
