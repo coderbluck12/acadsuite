@@ -64,7 +64,20 @@ class ConsultationBookingController extends Controller
 
         $availableSlots = array_values(array_diff($slots, $bookedSlots));
 
-        return response()->json(['slots' => $availableSlots]);
+        return response()->json([
+            'slots' => $availableSlots,
+            'debug' => [
+                'dayOfWeek' => $dayOfWeek,
+                'avail_type' => gettype($availability),
+                'availability' => $availability,
+                'dayConfig' => $dayConfig,
+                'start_calc' => $dayConfig['start'] ?? 'null',
+                'end_calc' => $dayConfig['end'] ?? 'null',
+                'start_time' => $start,
+                'end_time' => $end,
+                'generated_slots' => $slots
+            ]
+        ]);
     }
 
     public function verify(Request $request)
