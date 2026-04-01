@@ -21,12 +21,52 @@ class ConsultationBookingController extends Controller
         return view('tenant.public.consultation.book', compact('consultation', 'tenant'));
     }
 
+    public function getSlots(Request $request)
+    {
+        $tenant = app('currentTenant');
+        $date = $request->get('date');
+        $consultationId = $request->get('consultation_id');
+
+        if (!$date || !$consultationId) {
+            return response()->json(['slots' => []]);
+        }
+
+        $consultation = Consultation::where('tenant_id', $tenant->id)->findOrFail($consultationId);
+        $dayOfWeek = date('l', strtotime($date));
+
+        $availability = is_array($consultation->availability) ? $consultation->availability : json_decode($consultation->availability ?? '{}', true);
+        $dayConfig = $availability[$dayOfWeek] ?? null;
+
+        if (!$dayConfig || !isset($dayConfig['enabled']) || !$dayConfig['enabled']) {
+            return response()->json(['slots' => []]);
+        }
+
+        $start = strtotime($dayConfig['start']);
+        $end = strtotime($dayConfig['end']);
+        
+        $slots = [];
+        for ($time = $start; $time + 1800 <= $end; $time += 1800) {
+            $slots[] = date('H:i', $time);
+        }
+
+        $bookedSlots = ConsultationBooking::where('consultation_id', $consultation->id)
+            ->where('booking_date', $date)
+            ->pluck('booking_time')
+            ->toArray();
+
+        $availableSlots = array_values(array_diff($slots, $bookedSlots));
+
+        return response()->json(['slots' => $availableSlots]);
+    }
+
     public function verify(Request $request)
     {
         $tenant = app('currentTenant');
         $reference = $request->get('reference');
         $email = $request->get('email');
         $consultationId = $request->get('consultation_id');
+        $bookingDate = $request->get('booking_date');
+        $bookingTime = $request->get('booking_time');
 
         $consultation = Consultation::where('tenant_id', $tenant->id)->findOrFail($consultationId);
 
@@ -89,6 +129,8 @@ class ConsultationBookingController extends Controller
                     'tenant_id' => $tenant->id,
                     'consultation_id' => $consultation->id,
                     'user_id' => $user ? $user->id : null,
+                    'booking_date' => $bookingDate,
+                    'booking_time' => $bookingTime,
                     'amount_paid' => $consultation->fee,
                     'status' => 'paid',
                 ]

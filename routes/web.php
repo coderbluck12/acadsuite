@@ -56,6 +56,7 @@ $tenantRoutes = function () {
 
     // ----- Consultation -----
     Route::get('/consultation/book', [\App\Http\Controllers\Tenant\Public\ConsultationBookingController::class, 'book'])->name('tenant.consultation.book');
+    Route::get('/consultation/slots', [\App\Http\Controllers\Tenant\Public\ConsultationBookingController::class, 'getSlots'])->name('tenant.consultation.slots');
     Route::get('/consultation/verify', [\App\Http\Controllers\Tenant\Public\ConsultationBookingController::class, 'verify'])->name('tenant.consultation.verify');
     Route::get('/consultation/success/{booking}', [\App\Http\Controllers\Tenant\Public\ConsultationBookingController::class, 'success'])->name('tenant.consultation.success');
 

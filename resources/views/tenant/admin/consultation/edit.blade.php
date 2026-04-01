@@ -28,10 +28,35 @@
                         <small class="text-muted">Set to 0 for free consultations.</small>
                     </div>
                     
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Calendly Booking Link</label>
-                        <input type="url" name="calendly_link" class="form-control py-2" value="{{ old('calendly_link', $consultation->calendly_link) }}" placeholder="https://calendly.com/your-name/30min" required>
-                        <small class="text-muted">Past in your Calendly Event URL. This will be provided to the student after payment.</small>
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Weekly Availability</label>
+                        <div class="card border border-light shadow-sm">
+                            <div class="card-body p-0">
+                                <ul class="list-group list-group-flush">
+                                    @php
+                                        $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+                                        $availability = is_array($consultation->availability) ? $consultation->availability : json_decode($consultation->availability ?? '{}', true);
+                                    @endphp
+                                    @foreach($days as $day)
+                                        @php
+                                            $dayConfig = $availability[$day] ?? ['enabled' => false, 'start' => '09:00', 'end' => '17:00'];
+                                            $isEnabled = isset($dayConfig['enabled']) && $dayConfig['enabled'] == 1;
+                                        @endphp
+                                        <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                            <div class="form-check form-switch mb-0">
+                                                <input class="form-check-input" type="checkbox" name="availability[{{ $day }}][enabled]" value="1" id="day_{{ $day }}" {{ $isEnabled ? 'checked' : '' }}>
+                                                <label class="form-check-label fw-bold" for="day_{{ $day }}">{{ $day }}</label>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <input type="time" class="form-control form-control-sm border-0 bg-light" name="availability[{{ $day }}][start]" value="{{ $dayConfig['start'] ?? '09:00' }}" required>
+                                                <span class="text-muted small px-1">to</span>
+                                                <input type="time" class="form-control form-control-sm border-0 bg-light" name="availability[{{ $day }}][end]" value="{{ $dayConfig['end'] ?? '17:00' }}" required>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="mb-4">
@@ -49,10 +74,10 @@
             <div class="card border-0 bg-light rounded-4 p-4 shadow-sm">
                 <h5 class="fw-bold mb-3"><i class="bi bi-info-circle text-primary me-2"></i> How it works</h5>
                 <ol class="small text-muted ps-3 lh-lg mb-0">
-                    <li>Set your consultation <strong>fee</strong> and paste your <strong>Calendly link</strong>.</li>
+                    <li>Set your consultation <strong>fee</strong> and select your <strong>weekly available hours</strong>.</li>
                     <li>Students will see a "Book Consultation" button on your profile.</li>
-                    <li>They will pay the specified fee securely via the platform.</li>
-                    <li>Only after successful payment will they be given your Calendly link to pick a time.</li>
+                    <li>They will pick an available time slot dynamically calculated from your weekly schedule.</li>
+                    <li>They will securely pay the specified fee. You will receive an email and they will lock in their slot reservation.</li>
                 </ol>
             </div>
         </div>

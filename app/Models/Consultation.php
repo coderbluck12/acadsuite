@@ -15,7 +15,7 @@ class Consultation extends Model
         'tenant_id',
         'user_id',
         'fee',
-        'calendly_link',
+        'availability',
         'instructions',
         'is_active',
     ];
@@ -23,6 +23,7 @@ class Consultation extends Model
     protected $casts = [
         'is_active' => 'boolean',
         'fee' => 'decimal:2',
+        'availability' => 'array',
     ];
 
     public function user(): BelongsTo

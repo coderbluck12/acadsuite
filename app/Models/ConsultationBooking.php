@@ -14,6 +14,8 @@ class ConsultationBooking extends Model
         'tenant_id',
         'consultation_id',
         'user_id',
+        'booking_date',
+        'booking_time',
         'amount_paid',
         'payment_reference',
         'status',
@@ -21,6 +23,7 @@ class ConsultationBooking extends Model
 
     protected $casts = [
         'amount_paid' => 'decimal:2',
+        'booking_date' => 'date',
     ];
 
     public function consultation(): BelongsTo

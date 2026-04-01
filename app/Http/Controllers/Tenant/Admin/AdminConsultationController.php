@@ -18,7 +18,15 @@ class AdminConsultationController extends Controller
             [
                 'tenant_id' => app('currentTenant')->id,
                 'fee' => 0,
-                'calendly_link' => '',
+                'availability' => [
+                    'Monday' => ['enabled' => false, 'start' => '09:00', 'end' => '17:00'],
+                    'Tuesday' => ['enabled' => false, 'start' => '09:00', 'end' => '17:00'],
+                    'Wednesday' => ['enabled' => false, 'start' => '09:00', 'end' => '17:00'],
+                    'Thursday' => ['enabled' => false, 'start' => '09:00', 'end' => '17:00'],
+                    'Friday' => ['enabled' => false, 'start' => '09:00', 'end' => '17:00'],
+                    'Saturday' => ['enabled' => false, 'start' => '10:00', 'end' => '14:00'],
+                    'Sunday' => ['enabled' => false, 'start' => '10:00', 'end' => '14:00'],
+                ],
                 'instructions' => '',
                 'is_active' => false,
             ]
@@ -34,13 +42,13 @@ class AdminConsultationController extends Controller
 
         $validated = $request->validate([
             'fee' => 'required|numeric|min:0',
-            'calendly_link' => 'required|url',
+            'availability' => 'nullable|array',
             'instructions' => 'nullable|string|max:2000',
         ]);
 
         $consultation->update([
             'fee' => $validated['fee'],
-            'calendly_link' => $validated['calendly_link'],
+            'availability' => $validated['availability'] ?? [],
             'instructions' => $validated['instructions'] ?? '',
             'is_active' => $request->has('is_active'),
         ]);

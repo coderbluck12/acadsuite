@@ -33,6 +33,19 @@
 
                     @if($consultation->fee > 0)
                     <form id="paymentForm">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Select Date</label>
+                                <input type="date" id="booking_date" class="form-control py-2" required min="{{ date('Y-m-d') }}" onchange="fetchTimeSlots()">
+                            </div>
+                            <div class="col-md-6 mt-3 mt-md-0">
+                                <label class="form-label fw-semibold">Select Time Slot</label>
+                                <select id="booking_time" class="form-select py-2" required disabled>
+                                    <option value="">Choose a date first...</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="mb-4">
                             <label class="form-label fw-semibold">Your Email Address</label>
                             <input type="email" id="email-address" class="form-control py-2" required placeholder="Enter email for receipt" value="{{ auth()->check() ? auth()->user()->email : '' }}">
@@ -80,12 +93,47 @@
 @if($consultation->fee > 0)
 <script src="https://js.paystack.co/v1/inline.js"></script>
 <script>
+    function fetchTimeSlots() {
+        let date = document.getElementById('booking_date').value;
+        let timeSelect = document.getElementById('booking_time');
+        
+        if (!date) return;
+        
+        timeSelect.innerHTML = '<option value="">Loading slots...</option>';
+        timeSelect.disabled = true;
+
+        fetch(`{{ route('tenant.consultation.slots', ['tenant' => $tenant->subdomain]) }}?date=${date}&consultation_id={{ $consultation->id }}`)
+            .then(response => response.json())
+            .then(data => {
+                timeSelect.innerHTML = '';
+                if (data.slots && data.slots.length > 0) {
+                    data.slots.forEach(slot => {
+                        let option = document.createElement('option');
+                        option.value = slot;
+                        option.textContent = slot;
+                        timeSelect.appendChild(option);
+                    });
+                    timeSelect.disabled = false;
+                } else {
+                    timeSelect.innerHTML = '<option value="">No availability on this date</option>';
+                    timeSelect.disabled = true;
+                }
+            })
+            .catch(err => {
+                console.error('Error fetching slots:', err);
+                timeSelect.innerHTML = '<option value="">Error loading slots</option>';
+            });
+    }
+
     function payWithPaystack(e) {
         e.preventDefault();
         
         let email = document.getElementById('email-address').value;
-        if (!email) {
-            alert('Please enter an email address.');
+        let bookingDate = document.getElementById('booking_date').value;
+        let bookingTime = document.getElementById('booking_time').value;
+
+        if (!email || !bookingDate || !bookingTime) {
+            alert('Please complete all form fields including Date and Time selection.');
             return;
         }
 
@@ -100,7 +148,7 @@
                 let reference = response.reference || response.trxref || response.trans || customRef;
                 let baseUrl = "{{ route('tenant.consultation.verify', ['tenant' => $tenant->subdomain]) }}";
                 let separator = baseUrl.indexOf('?') !== -1 ? '&' : '?';
-                let verifyUrl = baseUrl + separator + "reference=" + encodeURIComponent(reference) + "&consultation_id={{ $consultation->id }}&email=" + encodeURIComponent(email);
+                let verifyUrl = baseUrl + separator + "reference=" + encodeURIComponent(reference) + "&consultation_id={{ $consultation->id }}&email=" + encodeURIComponent(email) + "&booking_date=" + encodeURIComponent(bookingDate) + "&booking_time=" + encodeURIComponent(bookingTime);
                 window.location.href = verifyUrl;
             },
             onClose: function() {
@@ -114,15 +162,18 @@
     function simulatePayment(isSuccess) {
         var customRef = 'TEST_' + Math.floor((Math.random() * 1000000000) + 1);
         let email = document.getElementById('email-address').value;
-        if (!email) {
-            alert("Please enter an email address first.");
+        let bookingDate = document.getElementById('booking_date').value;
+        let bookingTime = document.getElementById('booking_time').value;
+
+        if (!email || !bookingDate || !bookingTime) {
+            alert("Please complete all fields first.");
             return;
         }
         
         let baseUrl = "{{ route('tenant.consultation.verify', ['tenant' => $tenant->subdomain]) }}";
         let separator = baseUrl.indexOf('?') !== -1 ? '&' : '?';
         let flag = isSuccess ? 'simulate_success=1' : 'simulate_failure=1';
-        let verifyUrl = baseUrl + separator + "reference=" + encodeURIComponent(customRef) + "&consultation_id={{ $consultation->id }}&email=" + encodeURIComponent(email) + "&" + flag;
+        let verifyUrl = baseUrl + separator + "reference=" + encodeURIComponent(customRef) + "&consultation_id={{ $consultation->id }}&email=" + encodeURIComponent(email) + "&booking_date=" + encodeURIComponent(bookingDate) + "&booking_time=" + encodeURIComponent(bookingTime) + "&" + flag;
         
         window.location.href = verifyUrl;
     }
