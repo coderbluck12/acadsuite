@@ -1,4 +1,4 @@
-@extends('layouts.superadmin')
+@extends('layouts.admin')
 
 @section('sidebar-nav')
     @include('superadmin.partials.sidebar')
