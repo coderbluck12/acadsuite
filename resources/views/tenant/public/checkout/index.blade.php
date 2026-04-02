@@ -92,21 +92,5 @@
 
         handler.openIframe();
     }
-
-    function simulatePayment(isSuccess) {
-        var customRef = 'TEST_' + Math.floor((Math.random() * 1000000000) + 1);
-        let email = document.getElementById('email-address').value;
-        if (!email) {
-            alert("Please enter an email address first.");
-            return;
-        }
-        
-        let baseUrl = "{{ route('tenant.checkout.verify', ['tenant' => $tenant->subdomain]) }}";
-        let separator = baseUrl.indexOf('?') !== -1 ? '&' : '?';
-        let flag = isSuccess ? 'simulate_success=1' : 'simulate_failure=1';
-        let verifyUrl = baseUrl + separator + "reference=" + encodeURIComponent(customRef) + "&product_id={{ $product->id }}&email=" + encodeURIComponent(email) + "&" + flag;
-        
-        window.location.href = verifyUrl;
-    }
 </script>
 @endsection
