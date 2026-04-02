@@ -35,17 +35,6 @@
                                 Pay ₦{{ number_format($product->price, 2) }}
                             </button>
                         </div>
-                        
-                        @if(env('APP_ENV') === 'local' || !env('PAYSTACK_PUBLIC_KEY'))
-                        <div class="alert alert-info mt-4 small border-0 shadow-sm text-center">
-                            <strong><i class="bi bi-info-circle me-1"></i> Testing Mode Active</strong><br>
-                            Click below to test end-to-end scenarios without real payment.
-                            <div class="d-flex justify-content-center gap-2 mt-2">
-                                <button type="button" onclick="simulatePayment(true)" class="btn btn-sm btn-outline-success">Simulate Success</button>
-                                <button type="button" onclick="simulatePayment(false)" class="btn btn-sm btn-outline-danger">Simulate Failure</button>
-                            </div>
-                        </div>
-                        @endif
                         <div class="text-center mt-3">
                             <a href="{{ route('tenant.marketplace.show', ['tenant' => $tenant->subdomain, 'product' => $product->id]) }}" class="text-muted text-decoration-none small">Cancel and return to product</a>
                         </div>
