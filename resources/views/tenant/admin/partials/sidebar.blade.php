@@ -31,10 +31,10 @@
         <i class="bi bi-cart-check me-2"></i> Purchases
     </a>
     <a href="{{ route('tenant.admin.consultation.edit', ['tenant' => $tenant->subdomain ?? '']) }}" class="{{ request()->routeIs('tenant.admin.consultation.edit') ? 'active' : '' }} m-2">
-        <i class="bi bi-gear me-2"></i> Consultation Settings
+        <i class="bi bi-gear me-2"></i> Consultation
     </a>
     <a href="{{ route('tenant.admin.consultation.bookings', ['tenant' => $tenant->subdomain ?? '']) }}" class="{{ request()->routeIs('tenant.admin.consultation.bookings') ? 'active' : '' }} m-2">
-        <i class="bi bi-calendar2-check me-2"></i> Consultation Bookings
+        <i class="bi bi-calendar2-check me-2"></i> Bookings
     </a>
     <a href="/admin/wallet" class="{{ request()->routeIs('tenant.admin.wallet*') ? 'active' : '' }} m-2">
         <i class="bi bi-wallet2 me-2"></i> Wallet
