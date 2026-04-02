@@ -46,11 +46,24 @@ class AdminConsultationController extends Controller
             'instructions' => 'nullable|string|max:2000',
         ]);
 
+        $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        $submitted = $request->input('availability', []);
+        $availability = [];
+
+        foreach ($days as $day) {
+            $dayData = $submitted[$day] ?? [];
+            $availability[$day] = [
+                'enabled' => isset($dayData['enabled']) && $dayData['enabled'] == 1,
+                'start'   => $dayData['start'] ?? '09:00',
+                'end'     => $dayData['end'] ?? '17:00',
+            ];
+        }
+
         $consultation->update([
-            'fee' => $validated['fee'],
-            'availability' => $validated['availability'] ?? [],
+            'fee'          => $validated['fee'],
+            'availability' => $availability,
             'instructions' => $validated['instructions'] ?? '',
-            'is_active' => $request->has('is_active'),
+            'is_active'    => $request->has('is_active'),
         ]);
 
         return back()->with('success', 'Consultation settings updated successfully.');
