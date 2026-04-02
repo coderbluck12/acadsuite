@@ -55,6 +55,18 @@ $tenantRoutes = function () {
     Route::get('/checkout-receipt/{purchase}', [CheckoutController::class, 'receipt'])->name('tenant.checkout.receipt');
 
     // ----- Consultation -----
+    Route::get('/consultation/debug', function () {
+        $tenant = app('currentTenant');
+        $c = \App\Models\Consultation::where('tenant_id', $tenant->id)->first();
+        if (!$c) return response()->json(['error' => 'No consultation record found for this tenant']);
+        return response()->json([
+            'id'           => $c->id,
+            'is_active'    => $c->is_active,
+            'fee'          => $c->fee,
+            'raw_availability' => $c->getRawOriginal('availability'),
+            'cast_availability' => $c->availability,
+        ]);
+    })->name('tenant.consultation.debug');
     Route::get('/consultation/book', [\App\Http\Controllers\Tenant\Public\ConsultationBookingController::class, 'book'])->name('tenant.consultation.book');
     Route::get('/consultation/slots', [\App\Http\Controllers\Tenant\Public\ConsultationBookingController::class, 'getSlots'])->name('tenant.consultation.slots');
     Route::get('/consultation/verify', [\App\Http\Controllers\Tenant\Public\ConsultationBookingController::class, 'verify'])->name('tenant.consultation.verify');
