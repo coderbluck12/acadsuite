@@ -107,7 +107,9 @@
         timeSelect.innerHTML = '<option value="">Loading slots...</option>';
         timeSelect.disabled = true;
 
-        fetch(`{{ route('tenant.consultation.slots', ['tenant' => $tenant->subdomain]) }}?date=${date}&consultation_id={{ $consultation->id }}`)
+        let slotsBase = `{{ route('tenant.consultation.slots', ['tenant' => $tenant->subdomain]) }}`;
+        let slotsSep = slotsBase.includes('?') ? '&' : '?';
+        fetch(`${slotsBase}${slotsSep}date=${date}&consultation_id={{ $consultation->id }}`)
             .then(response => {
                 console.log('Slots response status:', response.status, response.url);
                 return response.json();
