@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('tenant_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // The academic
             $table->decimal('fee', 10, 2)->default(0);
-            $table->string('calendly_link');
+            $table->json('availability')->nullable();
             $table->text('instructions')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();

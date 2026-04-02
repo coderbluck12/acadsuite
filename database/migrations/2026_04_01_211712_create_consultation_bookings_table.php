@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('tenant_id')->constrained()->onDelete('cascade');
             $table->foreignId('consultation_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // The user booking
+            $table->date('booking_date')->nullable();
+            $table->string('booking_time')->nullable();
             $table->decimal('amount_paid', 10, 2)->default(0);
             $table->string('payment_reference')->nullable();
             $table->string('status')->default('pending'); // pending, paid, cancelled

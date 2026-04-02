@@ -11,15 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('consultations', function (Blueprint $table) {
-            $table->dropColumn('calendly_link');
-            $table->json('availability')->nullable()->after('fee');
-        });
-
-        Schema::table('consultation_bookings', function (Blueprint $table) {
-            $table->date('booking_date')->nullable()->after('user_id');
-            $table->string('booking_time')->nullable()->after('booking_date');
-        });
+        // Columns already included in the original create migrations.
+        // This migration is kept for historical reference only.
     }
 
     /**
@@ -27,13 +20,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('consultations', function (Blueprint $table) {
-            $table->string('calendly_link')->nullable();
-            $table->dropColumn('availability');
-        });
-
-        Schema::table('consultation_bookings', function (Blueprint $table) {
-            $table->dropColumn(['booking_date', 'booking_time']);
-        });
+        // Nothing to reverse.
     }
 };
