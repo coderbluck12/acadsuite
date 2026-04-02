@@ -109,6 +109,8 @@ $tenantRoutes = function () {
 
         Route::get('/consultation', [\App\Http\Controllers\Tenant\Admin\AdminConsultationController::class, 'edit'])->name('tenant.admin.consultation.edit');
         Route::put('/consultation', [\App\Http\Controllers\Tenant\Admin\AdminConsultationController::class, 'update'])->name('tenant.admin.consultation.update');
+        Route::get('/consultation/bookings', [\App\Http\Controllers\Tenant\Admin\AdminConsultationController::class, 'bookings'])->name('tenant.admin.consultation.bookings');
+        Route::post('/consultation/send-link', [\App\Http\Controllers\Tenant\Admin\AdminConsultationController::class, 'sendLink'])->name('tenant.admin.consultation.send-link');
         
         Route::get('/plans', [\App\Http\Controllers\Tenant\Admin\AdminPlanController::class, 'index'])->name('tenant.admin.plans');
     });

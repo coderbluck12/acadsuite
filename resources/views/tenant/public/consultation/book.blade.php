@@ -44,11 +44,6 @@
                                     <option value="">Choose a date first...</option>
                                 </select>
                             </div>
-
-                        <div class="alert alert-light border small p-2 mb-3" id="debug-info" style="font-family:monospace;font-size:11px;">
-                            Consultation ID: <strong>{{ $consultation->id }}</strong> | 
-                            Slots URL: <strong>{{ route('tenant.consultation.slots', ['tenant' => $tenant->subdomain]) }}</strong>
-                        </div>
                         </div>
 
                         <div class="mb-4">
@@ -110,12 +105,8 @@
         let slotsBase = `{{ route('tenant.consultation.slots', ['tenant' => $tenant->subdomain]) }}`;
         let slotsSep = slotsBase.includes('?') ? '&' : '?';
         fetch(`${slotsBase}${slotsSep}date=${date}&consultation_id={{ $consultation->id }}`)
-            .then(response => {
-                console.log('Slots response status:', response.status, response.url);
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                console.log('Slots response data:', JSON.stringify(data));
                 timeSelect.innerHTML = '';
                 if (data.slots && data.slots.length > 0) {
                     data.slots.forEach(slot => {
