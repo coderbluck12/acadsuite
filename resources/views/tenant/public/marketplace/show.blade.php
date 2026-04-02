@@ -7,6 +7,17 @@
                 <i class="bi bi-arrow-left me-1"></i> Back to Store
             </a>
         </div>
+
+        @if(session('error'))
+        <div class="alert alert-danger border-0 rounded-3 mb-4 shadow-sm">
+            <i class="bi bi-x-circle-fill me-2"></i>{{ session('error') }}
+        </div>
+        @endif
+        @if(session('success'))
+        <div class="alert alert-success border-0 rounded-3 mb-4 shadow-sm">
+            <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
+        </div>
+        @endif
         
         <div class="row g-5">
             <div class="col-md-5">

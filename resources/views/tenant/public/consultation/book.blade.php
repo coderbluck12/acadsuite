@@ -19,6 +19,12 @@
                         <p class="text-muted">Consultation Booking</p>
                     </div>
 
+                    @if(session('error'))
+                    <div class="alert alert-danger border-0 rounded-3 mb-4 shadow-sm">
+                        <i class="bi bi-x-circle-fill me-2"></i>{{ session('error') }}
+                    </div>
+                    @endif
+
                     @if($consultation->instructions)
                     <div class="alert alert-secondary border-0 mb-4 small rounded-3 p-3 text-dark">
                         <h6 class="fw-bold mb-2"><i class="bi bi-info-circle-fill me-1"></i> Instructions:</h6>
