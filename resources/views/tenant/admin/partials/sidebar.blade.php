@@ -1,4 +1,7 @@
 <nav>
+    <a href="/admin/dashboard" class="{{ request()->routeIs('tenant.admin.dashboard') ? 'active' : '' }} m-2">
+        <i class="bi bi-speedometer2 me-2"></i> Dashboard
+    </a>
     <a href="/admin/profile" class="{{ request()->routeIs('tenant.admin.profile') ? 'active' : '' }} m-2">
         <i class="bi bi-person-circle me-2"></i> Profile
     </a>
@@ -40,7 +43,7 @@
         <i class="bi bi-wallet2 me-2"></i> Wallet
     </a>
     <hr class="border-white opacity-25 mx-3">
-    <a href="/" class="m-2" target="_blank">
+    <a href="/admin/dashboard" class="m-2" target="_blank">
         <i class="bi bi-box-arrow-up-right me-2"></i> View Portal
     </a>
     <form method="POST" action="/logout">

@@ -33,6 +33,14 @@ class StudentAssignmentController extends Controller
         return view('tenant.student.assignments', compact('assignments', 'user'));
     }
 
+    public function show(Assignment $assignment): View
+    {
+        $user = Auth::guard('web')->user();
+        $submission = $assignment->submissions()->where('user_id', $user->id)->first();
+        $tenant = app('currentTenant');
+        return view('tenant.student.assignment-show', compact('assignment', 'user', 'submission', 'tenant'));
+    }
+
     public function submit(Request $request, Assignment $assignment): RedirectResponse
     {
         $user = Auth::guard('web')->user();

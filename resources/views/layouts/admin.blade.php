@@ -47,8 +47,8 @@
     <nav class="navbar navbar-expand-lg fixed-top" @if(isset($tenant) && $tenant->dashboard_bg_image) style="background: rgba(63, 81, 181, 0.9);" @endif>
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
-                @if(isset($tenant) && $tenant->logo)
-                    <img src="{{ asset('storage/' . $tenant->logo) }}" alt="logo" style="height:40px; width:auto; max-width:120px; object-fit:contain;">
+                @if(isset($tenant) && ($tenant->logo_dark || $tenant->logo))
+                    <img src="{{ asset('storage/' . ($tenant->logo_dark ?? $tenant->logo)) }}" alt="logo" style="height:40px; width:auto; max-width:120px; object-fit:contain;">
                 @else
                     <img src="{{ asset('assets/logo.png') }}" alt="logo" style="width:70px;">
                 @endif
@@ -76,8 +76,8 @@
     {{-- Sidebar --}}
     <aside class="sidebar" id="sidebar" @if(isset($tenant) && $tenant->dashboard_bg_image) style="background: rgba(63, 81, 181, 0.9);" @endif>
         <div class="mb-4 text-center pt-2">
-            @if(isset($tenant) && $tenant->logo)
-                <img src="{{ asset('storage/' . $tenant->logo) }}" alt="logo" style="height:50px; width:auto; max-width:120px; object-fit:contain;">
+            @if(isset($tenant) && ($tenant->logo_dark || $tenant->logo))
+                <img src="{{ asset('storage/' . ($tenant->logo_dark ?? $tenant->logo)) }}" alt="logo" style="height:50px; width:auto; max-width:120px; object-fit:contain;">
             @else
                 <img src="{{ asset('assets/logo.png') }}" alt="logo" style="width:70px;">
             @endif

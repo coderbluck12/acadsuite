@@ -26,8 +26,18 @@
                     <input type="file" name="avatar" class="form-control form-control-sm" accept="image/*">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label fw-semibold">Account Logo (Public Portal)</label>
+                    <label class="form-label fw-semibold">Logo — Light Background <small class="text-muted">(for public portal navbars)</small></label>
                     <input type="file" name="logo" class="form-control form-control-sm" accept="image/*">
+                    @if($tenant->logo)
+                        <div class="mt-1"><img src="{{ asset('storage/' . $tenant->logo) }}" alt="Logo" style="height:36px;"> <small class="text-muted ms-2">Current</small></div>
+                    @endif
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Logo — Dark/Colored Background <small class="text-muted">(for admin dashboard sidebar)</small></label>
+                    <input type="file" name="logo_dark" class="form-control form-control-sm" accept="image/*">
+                    @if($tenant->logo_dark)
+                        <div class="mt-1"><img src="{{ asset('storage/' . $tenant->logo_dark) }}" alt="Dark Logo" style="height:36px;background:#333;padding:4px;border-radius:4px;"> <small class="text-muted ms-2">Current</small></div>
+                    @endif
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">Dashboard Background Image</label>

@@ -35,7 +35,7 @@
                         <td>{{ $pub->year ?: '—' }}</td>
                         <td><span class="badge {{ $pub->is_published ? 'bg-success' : 'bg-secondary' }}">{{ $pub->is_published ? 'Published' : 'Draft' }}</span></td>
                         <td>
-                            <a href="{{ route('tenant.publications.show', ['tenant' => $tenant->subdomain, 'publication' => $pub->id]) }}" class="btn btn-sm btn-outline-info me-1" target="_blank" title="View Details"><i class="bi bi-eye"></i></a>
+                            <a href="{{ route('tenant.admin.publications.show', ['tenant' => $tenant->subdomain, 'publication' => $pub->id]) }}" class="btn btn-sm btn-outline-info me-1" title="View Details"><i class="bi bi-eye"></i></a>
                             <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal" data-bs-target="#editPubModal{{ $pub->id }}" title="Edit"><i class="bi bi-pencil"></i></button>
                             <form method="POST" action="{{ route('tenant.admin.publications.destroy', ['tenant' => $tenant->subdomain, 'publication' => $pub]) }}" class="d-inline" onsubmit="return confirm('Delete this publication?')">
                                 @csrf @method('DELETE')

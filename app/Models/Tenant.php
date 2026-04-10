@@ -16,6 +16,7 @@ class Tenant extends Model
         'bio',
         'avatar',
         'logo',
+        'logo_dark',
         'dashboard_bg_image',
         'home_bg_image',
         'orcid_url',

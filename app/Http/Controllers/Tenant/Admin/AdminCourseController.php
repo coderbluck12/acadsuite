@@ -71,4 +71,10 @@ class AdminCourseController extends Controller
         $course->delete();
         return back()->with('success', 'Course deleted.');
     }
+
+    public function show(Course $course): View
+    {
+        $course->load(['students', 'assignments']);
+        return view('tenant.admin.course-show', compact('course'));
+    }
 }

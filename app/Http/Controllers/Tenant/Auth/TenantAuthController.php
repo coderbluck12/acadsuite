@@ -44,7 +44,7 @@ class TenantAuthController extends Controller
         // FIX: Redirect to the URL path instead of the route name!
         // This keeps the user securely on coderbluck.acadsuite.tertab.com
         return $user->role === 'admin'
-            ? redirect('/admin/profile')
+            ? redirect('/admin/dashboard')
             : redirect('/student/dashboard');
     }
 

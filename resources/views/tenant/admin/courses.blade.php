@@ -33,6 +33,7 @@
                         <td>{{ $course->level ?: '—' }}</td>
                         <td><span class="badge {{ $course->is_published ? 'bg-success' : 'bg-secondary' }}">{{ $course->is_published ? 'Published' : 'Draft' }}</span></td>
                         <td>
+                            <a href="{{ route('tenant.admin.courses.show', ['tenant' => $tenant->subdomain, 'course' => $course]) }}" class="btn btn-sm btn-outline-info me-1" title="View Details"><i class="bi bi-eye"></i></a>
                             <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal" data-bs-target="#editCourseModal{{ $course->id }}"><i class="bi bi-pencil"></i></button>
                             <form method="POST" action="{{ route('tenant.admin.courses.destroy', ['tenant' => $tenant->subdomain, 'course' => $course]) }}" class="d-inline" onsubmit="return confirm('Delete this course?')">
                                 @csrf @method('DELETE')

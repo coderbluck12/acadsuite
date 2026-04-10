@@ -8,7 +8,7 @@
     <a href="{{ route('tenant.student.courses', ['tenant' => $tenant->subdomain]) }}" class="{{ request()->routeIs('tenant.student.courses') ? 'active' : '' }} m-2">
         <i class="bi bi-book me-2"></i> Courses
     </a>
-    <a href="{{ route('tenant.student.assignments', ['tenant' => $tenant->subdomain]) }}" class="{{ request()->routeIs('tenant.student.assignments') ? 'active' : '' }} m-2">
+    <a href="{{ route('tenant.student.assignments', ['tenant' => $tenant->subdomain]) }}" class="{{ request()->routeIs('tenant.student.assignments*') ? 'active' : '' }} m-2">
         <i class="bi bi-file-earmark-text me-2"></i> Assignments
     </a>
     <a href="{{ route('tenant.student.notifications', ['tenant' => $tenant->subdomain]) }}" class="{{ request()->routeIs('tenant.student.notifications') ? 'active' : '' }} m-2">
@@ -77,17 +77,32 @@
                         @endif
 
                         @if(!$isSubmitted)
-                            <button class="btn btn-primary btn-sm w-100" data-bs-toggle="modal" data-bs-target="#submitModal{{ $assignment->id }}">
-                                <i class="bi bi-upload"></i> Submit Work
-                            </button>
+                            <div class="d-flex gap-2">
+                                <a href="{{ route('tenant.student.assignments.show', ['tenant' => $tenant->subdomain, 'assignment' => $assignment]) }}" class="btn btn-outline-secondary btn-sm w-50">
+                                    <i class="bi bi-eye"></i> Open
+                                </a>
+                                <button class="btn btn-primary btn-sm w-50" data-bs-toggle="modal" data-bs-target="#submitModal{{ $assignment->id }}">
+                                    <i class="bi bi-upload"></i> Submit
+                                </button>
+                            </div>
                         @elseif($submission->status === 'graded')
-                            <button class="btn btn-primary btn-sm w-100" disabled>
-                                <i class="bi bi-award"></i> Graded
-                            </button>
+                            <div class="d-flex gap-2">
+                                <a href="{{ route('tenant.student.assignments.show', ['tenant' => $tenant->subdomain, 'assignment' => $assignment]) }}" class="btn btn-outline-secondary btn-sm w-50">
+                                    <i class="bi bi-eye"></i> Open
+                                </a>
+                                <button class="btn btn-primary btn-sm w-50" disabled>
+                                    <i class="bi bi-award"></i> Graded
+                                </button>
+                            </div>
                         @else
-                            <button class="btn btn-success btn-sm w-100" disabled>
-                                <i class="bi bi-check-all"></i> Completed
-                            </button>
+                            <div class="d-flex gap-2">
+                                <a href="{{ route('tenant.student.assignments.show', ['tenant' => $tenant->subdomain, 'assignment' => $assignment]) }}" class="btn btn-outline-secondary btn-sm w-50">
+                                    <i class="bi bi-eye"></i> Open
+                                </a>
+                                <button class="btn btn-success btn-sm w-50" disabled>
+                                    <i class="bi bi-check-all"></i> Submitted
+                                </button>
+                            </div>
                         @endif
                     </div>
                 </div>

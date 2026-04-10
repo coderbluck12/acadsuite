@@ -23,6 +23,7 @@ use App\Http\Controllers\Tenant\Admin\AdminAssignmentController;
 use App\Http\Controllers\Tenant\Admin\AdminProductController;
 use App\Http\Controllers\Tenant\Admin\AdminWalletController;
 use App\Http\Controllers\Tenant\Admin\AdminPurchaseController;
+use App\Http\Controllers\Tenant\Admin\AdminDashboardController;
 use App\Http\Controllers\Tenant\Student\StudentDashboardController;
 use App\Http\Controllers\Tenant\Student\StudentNotificationController;
 use App\Http\Controllers\Tenant\Student\StudentAssignmentController;
@@ -88,6 +89,7 @@ $tenantRoutes = function () {
 
     // ----- Admin Panel -----
     Route::prefix('admin')->middleware('tenant_admin')->group(function () {
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('tenant.admin.dashboard');
         Route::get('/profile', [ProfileController::class, 'show'])->name('tenant.admin.profile');
         Route::post('/profile', [ProfileController::class, 'update'])->name('tenant.admin.profile.update');
 
@@ -121,6 +123,7 @@ $tenantRoutes = function () {
         Route::get('/notifications', [StudentNotificationController::class, 'index'])->name('tenant.student.notifications');
         Route::patch('/notifications/{notification}/read', [StudentNotificationController::class, 'markRead'])->name('tenant.student.notifications.read');
         Route::get('/assignments', [StudentAssignmentController::class, 'index'])->name('tenant.student.assignments');
+        Route::get('/assignments/{assignment}', [StudentAssignmentController::class, 'show'])->name('tenant.student.assignments.show');
         Route::post('/assignments/{assignment}/submit', [StudentAssignmentController::class, 'submit'])->name('tenant.student.assignments.submit');
         
         Route::get('/courses', [\App\Http\Controllers\Tenant\Student\StudentCourseController::class, 'index'])->name('tenant.student.courses');

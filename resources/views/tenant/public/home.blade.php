@@ -38,10 +38,6 @@
                                 style="color: inherit; text-decoration: none;">Blogs</a>
                         </li>
                         <li class="nav-item">
-                            <a href="/courses" class="nav-link rounded-5 decoration-0"
-                                style="color: inherit; text-decoration: none;">Courses</a>
-                        </li>
-                        <li class="nav-item">
                             <a href="/marketplace" class="nav-link rounded-5 decoration-0" style="color: inherit; text-decoration: none;">Store</a>
                         </li>
                         @if($tenant->orcid_url)
@@ -53,7 +49,7 @@
                         <li class="nav-item">
                             @auth
                                 @if(auth()->user()->role === 'admin')
-                                    <a href="/admin/profile" class="btn btn-primary rounded-pill px-3 py-1 ms-2">Dashboard</a>
+                                    <a href="/admin/dashboard" class="btn btn-primary rounded-pill px-3 py-1 ms-2">Dashboard</a>
                                 @else
                                     <a href="/student/dashboard" class="btn btn-primary rounded-pill px-3 py-1 ms-2">Dashboard</a>
                                 @endif
@@ -310,6 +306,43 @@
     </section>
     @endif
 
+    @if(isset($resources) && $resources->count() > 0)
+    <section class="py-5" style="background-color: #f0f4ff;">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold mb-0" style="color: rgb(36, 56, 111);">Resources</h2>
+                <a href="/resources" class="btn btn-outline-primary rounded-pill px-4">View All</a>
+            </div>
+            <div class="row g-3">
+                @foreach($resources as $resource)
+                <div class="col-md-6 col-lg-4">
+                    <div class="card border-0 shadow-sm h-100" style="border-left: 4px solid #dc3545 !important;">
+                        <div class="card-body">
+                            <h6 class="fw-semibold text-primary mb-1">{{ $resource->title }}</h6>
+                            @if($resource->category)
+                            <span class="badge bg-light text-secondary small mb-2">{{ $resource->category }}</span>
+                            @endif
+                            <p class="card-text text-muted small mb-3">{{ Str::limit($resource->description, 120) }}</p>
+                        </div>
+                        <div class="card-footer bg-transparent border-0 pt-0">
+                            @if($resource->file_path)
+                            <a href="{{ asset('storage/' . $resource->file_path) }}" target="_blank" download class="btn btn-outline-success btn-sm rounded-pill px-3">
+                                <i class="bi bi-download me-1"></i> Download
+                            </a>
+                            @elseif($resource->link)
+                            <a href="{{ $resource->link }}" target="_blank" class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                                <i class="bi bi-link-45deg me-1"></i> Visit Link
+                            </a>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+    @endif
+
     <section class="py-5 position-relative text-white" id="testimonial" style="background-image: url('{{ asset('assets/young-student-learning-library.jpg') }}');">
         <div class="position-absolute top-0 start-0 w-100 h-100 bg-danger opacity-75"></div>
 
@@ -434,7 +467,6 @@
                         <li><a href="/publications" class="text-light text-decoration-none">Publications</a></li>
                         <li><a href="/resources" class="text-light text-decoration-none">Resources</a></li>
                         <li><a href="/blogs" class="text-light text-decoration-none">Blog</a></li>
-                        <li><a href="/courses" class="text-light text-decoration-none">Courses</a></li>
                         <li><a href="/marketplace" class="text-light text-decoration-none">Store</a></li>
                         @if($tenant->orcid_url)
                         <li><a href="{{ $tenant->orcid_url }}" target="_blank" class="text-light text-decoration-none">ORCID</a></li>

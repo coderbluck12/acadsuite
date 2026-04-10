@@ -30,13 +30,14 @@ class ProfileController extends Controller
             'address'       => 'nullable|string|max:500',
             'avatar'        => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'logo'          => 'nullable|image|mimes:jpg,jpeg,png,svg|max:2048',
+            'logo_dark'     => 'nullable|image|mimes:jpg,jpeg,png,svg|max:2048',
             'dashboard_bg_image' => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
             'home_bg_image' => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
             'remove_dashboard_bg' => 'nullable|boolean',
             'custom_domain' => 'nullable|string|max:255|unique:tenants,custom_domain,' . $tenant->id,
         ]);
 
-        foreach (['avatar', 'logo', 'dashboard_bg_image', 'home_bg_image'] as $field) {
+        foreach (['avatar', 'logo', 'logo_dark', 'dashboard_bg_image', 'home_bg_image'] as $field) {
             if ($request->hasFile($field)) {
                 if ($tenant->$field) {
                     Storage::disk('public')->delete($tenant->$field);

@@ -88,6 +88,11 @@ class AdminPublicationController extends Controller
         return redirect()->route('tenant.admin.publications.index', ['tenant' => app('currentTenant')->subdomain])->with('success', 'Publication updated.');
     }
 
+    public function show(Publication $publication): View
+    {
+        return view('tenant.admin.publication-show', compact('publication'));
+    }
+
     public function destroy(Publication $publication): RedirectResponse
     {
         if ($publication->cover_image) Storage::disk('public')->delete($publication->cover_image);
