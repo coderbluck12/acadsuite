@@ -68,9 +68,9 @@
 
                         <div class="mt-auto">
                             @if($isEnrolled)
-                                <button class="btn btn-outline-success w-100" disabled>
-                                    <i class="bi bi-check-circle me-1"></i> Enrolled
-                                </button>
+                                <a href="{{ route('tenant.student.courses.show', ['tenant' => $tenant->subdomain, 'course' => $course->id]) }}" class="btn btn-success w-100">
+                                    <i class="bi bi-door-open me-1"></i> Open Course
+                                </a>
                             @else
                                 <a href="{{ route('tenant.student.courses.show', ['tenant' => $tenant->subdomain, 'course' => $course->id]) }}" class="btn btn-primary w-100">
                                     <i class="bi bi-eye me-1"></i> View Details
