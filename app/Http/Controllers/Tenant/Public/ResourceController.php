@@ -19,11 +19,15 @@ class ResourceController extends Controller
         if ($user) {
             $enrolledCourseIds = $user->courses()->pluck('courses.id')->toArray();
             $query->where(function($q) use ($enrolledCourseIds) {
-                $q->where('is_general', true)
+                $q->whereNull('course_id')
+                  ->orWhere('is_general', true)
                   ->orWhereIn('course_id', $enrolledCourseIds);
             });
         } else {
-            $query->where('is_general', true);
+            $query->where(function($q) {
+                $q->whereNull('course_id')
+                  ->orWhere('is_general', true);
+            });
         }
         
         $resources = $query->latest()->paginate(12);

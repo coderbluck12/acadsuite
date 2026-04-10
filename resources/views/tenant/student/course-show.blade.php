@@ -88,7 +88,7 @@
                         <div class="card border-0 shadow-sm h-100" style="border-left: 4px solid #0d6efd !important; background-color: #f8f9fa;">
                             <div class="card-body p-3 d-flex flex-column">
                                 <h6 class="fw-semibold text-primary mb-1">{{ $resource->title }}</h6>
-                                <p class="card-text text-muted small mb-3 flex-grow-1" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $resource->description }}</p>
+                                <p class="card-text text-muted small mb-3 flex-grow-1">{{ Str::limit($resource->description ?? '', 100) }}</p>
                                 
                                 <div class="mt-auto">
                                     @if($resource->file_path)
