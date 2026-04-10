@@ -106,7 +106,7 @@
                             <i class="bi bi-wallet2 fs-4 text-success"></i>
                         </div>
                         <div>
-                            <div class="fs-2 fw-bold text-success">₦{{ number_format($walletBalance, 2) }}</div>
+                            <div class="fs-2 fw-bold text-success">₦{{ number_format($walletBalance, 0) }}</div>
                             <div class="text-muted small">Wallet Balance</div>
                         </div>
                     </div>
