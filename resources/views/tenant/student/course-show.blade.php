@@ -41,13 +41,13 @@
         </a>
     </div>
 
-    <div class="card shadow border-0">
+    <div class="card shadow border-0 mb-4">
         <div class="row g-0">
             <div class="col-md-4">
-                <img src="{{ $course->cover_image ? asset('storage/' . $course->cover_image) : asset('assets/publications.jpg') }}" class="img-fluid rounded-start h-100" style="object-fit: cover;" alt="{{ $course->title }}">
+                <img src="{{ $course->cover_image ? asset('storage/' . $course->cover_image) : asset('assets/publications.jpg') }}" class="img-fluid rounded-start w-100" style="object-fit: cover; max-height: 350px;" alt="{{ $course->title }}">
             </div>
             <div class="col-md-8">
-                <div class="card-body">
+                <div class="card-body d-flex flex-column h-100">
                     <h2 class="card-title fw-bold text-primary">{{ $course->title }}</h2>
                     <div class="text-muted mb-3">
                         <i class="bi bi-bar-chart me-1"></i> {{ $course->level ?? 'All Levels' }} | 
@@ -57,39 +57,11 @@
                     <h5 class="mt-4">Course Description</h5>
                     <p class="card-text text-muted" style="white-space: pre-wrap;">{{ $course->description }}</p>
                     
-                    <div class="mt-4">
+                    <div class="mt-auto pt-3">
                         @if($isEnrolled)
                             <button class="btn btn-success" disabled>
                                 <i class="bi bi-check-circle me-1"></i> You are enrolled in this course
                             </button>
-                            
-                            @if(isset($resources) && $resources->count() > 0)
-                                <div class="mt-5">
-                                    <h5 class="fw-bold mb-3 border-bottom pb-2">Course Resources</h5>
-                                    <div class="row g-3">
-                                        @foreach($resources as $resource)
-                                        <div class="col-md-6">
-                                            <div class="card border-0 shadow-sm h-100" style="border-left: 4px solid #0d6efd !important;">
-                                                <div class="card-body p-3">
-                                                    <h6 class="fw-semibold text-primary mb-1">{{ $resource->title }}</h6>
-                                                    <p class="card-text text-muted small mb-2" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $resource->description }}</p>
-                                                    @if($resource->file_path)
-                                                        <a href="{{ asset('storage/' . $resource->file_path) }}" target="_blank" download class="btn btn-outline-success btn-sm rounded-pill px-3">
-                                                            <i class="bi bi-download me-1"></i> Download
-                                                        </a>
-                                                    @elseif($resource->external_url || $resource->link)
-                                                        <a href="{{ $resource->external_url ?? $resource->link }}" target="_blank" class="btn btn-outline-primary btn-sm rounded-pill px-3">
-                                                            <i class="bi bi-link-45deg me-1"></i> Visit Link
-                                                        </a>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-                            @endif
-
                         @else
                             <form action="{{ route('tenant.student.courses.enroll', ['tenant' => $tenant->subdomain, 'course' => $course->id]) }}" method="POST" class="d-inline">
                                 @csrf
@@ -103,5 +75,39 @@
             </div>
         </div>
     </div>
+
+    @if($isEnrolled && isset($resources) && $resources->count() > 0)
+        <div class="card shadow border-0 mt-4">
+            <div class="card-body p-4">
+                <h5 class="fw-bold mb-4 border-bottom pb-2">
+                    <i class="bi bi-folder2-open me-2 text-primary"></i> Course Resources
+                </h5>
+                <div class="row g-3">
+                    @foreach($resources as $resource)
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card border-0 shadow-sm h-100" style="border-left: 4px solid #0d6efd !important; background-color: #f8f9fa;">
+                            <div class="card-body p-3 d-flex flex-column">
+                                <h6 class="fw-semibold text-primary mb-1">{{ $resource->title }}</h6>
+                                <p class="card-text text-muted small mb-3 flex-grow-1" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $resource->description }}</p>
+                                
+                                <div class="mt-auto">
+                                    @if($resource->file_path)
+                                        <a href="{{ asset('storage/' . $resource->file_path) }}" target="_blank" download class="btn btn-outline-success btn-sm rounded-pill px-3">
+                                            <i class="bi bi-download me-1"></i> Download
+                                        </a>
+                                    @elseif($resource->external_url || $resource->link)
+                                        <a href="{{ $resource->external_url ?? $resource->link }}" target="_blank" class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                                            <i class="bi bi-link-45deg me-1"></i> Visit Link
+                                        </a>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    @endif
 </div>
 @endsection
