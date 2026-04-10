@@ -26,4 +26,9 @@ class Course extends Model
     {
         return $this->belongsToMany(User::class)->withPivot('enrolled_at')->withTimestamps();
     }
+
+    public function resources(): HasMany
+    {
+        return $this->hasMany(Resource::class);
+    }
 }
