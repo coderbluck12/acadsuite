@@ -82,28 +82,25 @@
                 <h5 class="fw-bold mb-4 border-bottom pb-2">
                     <i class="bi bi-folder2-open me-2 text-primary"></i> Course Resources
                 </h5>
-                <div class="row g-3">
+                <div class="list-group list-group-flush">
                     @foreach($resources as $resource)
-                    <div class="col-md-6 col-lg-4">
-                        <div class="card border-0 shadow-sm h-100" style="border-left: 4px solid #0d6efd !important; background-color: #f8f9fa;">
-                            <div class="card-body p-3 d-flex flex-column">
+                        <div class="list-group-item px-0 py-3 d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+                            <div>
                                 <h6 class="fw-semibold text-primary mb-1">{{ $resource->title }}</h6>
-                                <p class="card-text text-muted small mb-3 flex-grow-1">{{ Str::limit($resource->description ?? '', 100) }}</p>
-                                
-                                <div class="mt-auto">
-                                    @if($resource->file_path)
-                                        <a href="{{ asset('storage/' . $resource->file_path) }}" target="_blank" download class="btn btn-outline-success btn-sm rounded-pill px-3">
-                                            <i class="bi bi-download me-1"></i> Download
-                                        </a>
-                                    @elseif($resource->external_url || $resource->link)
-                                        <a href="{{ $resource->external_url ?? $resource->link }}" target="_blank" class="btn btn-outline-primary btn-sm rounded-pill px-3">
-                                            <i class="bi bi-link-45deg me-1"></i> Visit Link
-                                        </a>
-                                    @endif
-                                </div>
+                                <p class="text-muted small mb-2 mb-md-0 m-0">{{ Str::limit($resource->description ?? '', 120) }}</p>
+                            </div>
+                            <div class="mt-2 mt-md-0 ms-md-3 flex-shrink-0">
+                                @if($resource->file_path)
+                                    <a href="{{ asset('storage/' . $resource->file_path) }}" target="_blank" download class="btn btn-outline-success btn-sm rounded-pill px-3">
+                                        <i class="bi bi-download me-1"></i> Download
+                                    </a>
+                                @elseif($resource->external_url || $resource->link)
+                                    <a href="{{ $resource->external_url ?? $resource->link }}" target="_blank" class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                                        <i class="bi bi-link-45deg me-1"></i> Visit Link
+                                    </a>
+                                @endif
                             </div>
                         </div>
-                    </div>
                     @endforeach
                 </div>
             </div>

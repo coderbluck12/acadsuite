@@ -120,9 +120,13 @@
                 <div class="tab-pane fade {{ $index === 0 ? 'show active' : '' }}" id="{{ Str::slug($category) }}" role="tabpanel">
                     <div class="row g-4">
                         @php
-                            $categoryResources = $category === 'General' && $resources->isEmpty() 
-                                ? collect([]) 
-                                : $resources->where('category', $category);
+                            if ($category === 'General') {
+                                $categoryResources = $resources->filter(function($r) {
+                                    return empty($r->category) || $r->category === 'General';
+                                });
+                            } else {
+                                $categoryResources = $resources->where('category', $category);
+                            }
                         @endphp
                         
                         @forelse($categoryResources as $resource)
