@@ -17,6 +17,9 @@
     <a href="{{ route('tenant.marketplace.index', ['tenant' => $tenant->subdomain]) }}" class="{{ request()->routeIs('tenant.marketplace*') ? 'active' : '' }} m-2">
         <i class="bi bi-shop me-2"></i> Store
     </a>
+    <a href="{{ route('tenant.resources', ['tenant' => $tenant->subdomain]) }}" class="{{ request()->is('resources*') ? 'active' : '' }} m-2">
+        <i class="bi bi-folder2-open me-2"></i> Resources
+    </a>
     <hr class="border-white opacity-25 mx-3">
     <a href="{{ route('tenant.home', ['tenant' => $tenant->subdomain]) }}" class="m-2" target="_blank">
         <i class="bi bi-box-arrow-up-right me-2"></i> Portal Home

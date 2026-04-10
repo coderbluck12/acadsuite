@@ -31,7 +31,7 @@
                         <li class="nav-item">
                             @auth
                                 @if(auth()->user()->role === 'admin')
-                                    <a href="/admin/profile" class="btn btn-primary rounded-pill px-3 py-1 ms-2">Dashboard</a>
+                                    <a href="/admin/dashboard" class="btn btn-primary rounded-pill px-3 py-1 ms-2">Dashboard</a>
                                 @else
                                     <a href="/student/dashboard" class="btn btn-primary rounded-pill px-3 py-1 ms-2">Dashboard</a>
                                 @endif

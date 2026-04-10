@@ -38,15 +38,12 @@
                             <a href="/blogs" class="nav-link rounded-5" style="color: inherit; text-decoration: none;">Blogs</a>
                         </li>
                         <li class="nav-item">
-                            <a href="/courses" class="nav-link rounded-5" style="color: inherit; text-decoration: none;">Courses</a>
-                        </li>
-                        <li class="nav-item">
                             <a href="/marketplace" class="nav-link active rounded-5" style="color: inherit; text-decoration: none; background-color: #dc3545; padding-inline: 20px;">Store</a>
                         </li>
                         <li class="nav-item">
                             @auth
                                 @if(auth()->user()->role === 'admin')
-                                    <a href="/admin/profile" class="btn btn-primary rounded-pill px-3 py-1 ms-2">Dashboard</a>
+                                    <a href="/admin/dashboard" class="btn btn-primary rounded-pill px-3 py-1 ms-2">Dashboard</a>
                                 @else
                                     <a href="/student/dashboard" class="btn btn-primary rounded-pill px-3 py-1 ms-2">Dashboard</a>
                                 @endif

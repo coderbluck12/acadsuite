@@ -38,9 +38,6 @@
                             <a href="/blogs" class="nav-link rounded-5" style="color: inherit; text-decoration: none;">Blogs</a>
                         </li>
                         <li class="nav-item">
-                            <a href="/courses" class="nav-link rounded-5" style="color: inherit; text-decoration: none;">Courses</a>
-                        </li>
-                        <li class="nav-item">
                             <a href="/marketplace" class="nav-link rounded-5" style="color: inherit; text-decoration: none;">Store</a>
                         </li>
                         @if($tenant->orcid_url)
@@ -51,7 +48,7 @@
                         <li class="nav-item">
                             @auth
                                 @if(auth()->user()->role === 'admin')
-                                    <a href="/admin/profile" class="btn btn-primary rounded-pill px-3 py-1 ms-2">Dashboard</a>
+                                    <a href="/admin/dashboard" class="btn btn-primary rounded-pill px-3 py-1 ms-2">Dashboard</a>
                                 @else
                                     <a href="/student/dashboard" class="btn btn-primary rounded-pill px-3 py-1 ms-2">Dashboard</a>
                                 @endif
@@ -147,7 +144,6 @@
                         <li><a href="{{ route('tenant.home', ['tenant' => $tenant->subdomain]) }}" class="text-light text-decoration-none">Home</a></li>
                         <li><a href="{{ route('tenant.publications', ['tenant' => $tenant->subdomain]) }}" class="text-light text-decoration-none">Publications</a></li>
                         <li><a href="{{ route('tenant.blogs', ['tenant' => $tenant->subdomain]) }}" class="text-light text-decoration-none">Blog</a></li>
-                        <li><a href="{{ route('tenant.courses', ['tenant' => $tenant->subdomain]) }}" class="text-light text-decoration-none">Courses</a></li>
                         <li><a href="{{ route('tenant.resources', ['tenant' => $tenant->subdomain]) }}" class="text-light text-decoration-none">Resources</a></li>
                     </ul>
                 </div>
