@@ -57,8 +57,9 @@ class StudentCourseController extends Controller
         $user = Auth::guard('web')->user();
         $tenant = app('currentTenant');
         $isEnrolled = $course->students()->where('user_id', $user->id)->exists();
+        $resources = $course->resources()->where('is_published', true)->get();
 
-        return view('tenant.student.course-show', compact('course', 'user', 'isEnrolled', 'tenant'));
+        return view('tenant.student.course-show', compact('course', 'user', 'isEnrolled', 'tenant', 'resources'));
     }
 
     public function enroll(Course $course): RedirectResponse

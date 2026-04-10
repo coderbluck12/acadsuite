@@ -62,6 +62,34 @@
                             <button class="btn btn-success" disabled>
                                 <i class="bi bi-check-circle me-1"></i> You are enrolled in this course
                             </button>
+                            
+                            @if(isset($resources) && $resources->count() > 0)
+                                <div class="mt-5">
+                                    <h5 class="fw-bold mb-3 border-bottom pb-2">Course Resources</h5>
+                                    <div class="row g-3">
+                                        @foreach($resources as $resource)
+                                        <div class="col-md-6">
+                                            <div class="card border-0 shadow-sm h-100" style="border-left: 4px solid #0d6efd !important;">
+                                                <div class="card-body p-3">
+                                                    <h6 class="fw-semibold text-primary mb-1">{{ $resource->title }}</h6>
+                                                    <p class="card-text text-muted small mb-2" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $resource->description }}</p>
+                                                    @if($resource->file_path)
+                                                        <a href="{{ asset('storage/' . $resource->file_path) }}" target="_blank" download class="btn btn-outline-success btn-sm rounded-pill px-3">
+                                                            <i class="bi bi-download me-1"></i> Download
+                                                        </a>
+                                                    @elseif($resource->external_url || $resource->link)
+                                                        <a href="{{ $resource->external_url ?? $resource->link }}" target="_blank" class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                                                            <i class="bi bi-link-45deg me-1"></i> Visit Link
+                                                        </a>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+
                         @else
                             <form action="{{ route('tenant.student.courses.enroll', ['tenant' => $tenant->subdomain, 'course' => $course->id]) }}" method="POST" class="d-inline">
                                 @csrf
